@@ -6,7 +6,8 @@
 import type { Kit } from './kit';
 import type { Lang } from './format';
 
-export interface FAQ { q: string; a: string }
+/** `open` : question ouverte d'emblée (la question que se pose le visiteur type de la page, testeurs du 2026-11-08). */
+export interface FAQ { q: string; a: string; open?: boolean }
 export interface MiniOpts { /** titre */ t?: string; /** champs montrés */ p?: string[]; /** valeurs par défaut */ d?: Record<string, number | string>; /** texte du lien */ c?: string }
 
 export interface Helpers extends Kit {

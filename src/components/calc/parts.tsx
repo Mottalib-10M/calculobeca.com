@@ -13,12 +13,12 @@ export function ResultCard({ label, value, sub, pre, children }: { label: string
   );
 }
 
+/** Lignes de détail. Plus de barre sous le libellé : sans légende, les testeurs du 2026-11-08 ne savaient pas la lire. */
 export function Rows({ rows }: { rows: Array<[string, string, number?]> }) {
-  const max = Math.max(1, ...rows.map((r) => r[2] ?? 0));
   return (
     <table className="mt-3 w-full table-fixed text-sm"><tbody className="divide-y divide-navy-200">
-      {rows.map(([l, v, w]) => (
-        <tr key={l}><td className="py-1.5 pe-3 text-navy-700 hyphens-auto [overflow-wrap:anywhere]">{l}{w !== undefined && w > 0 && <span aria-hidden="true" className="mt-1 block h-1 rounded bg-accent-500/60" style={{ width: `${Math.max(3, (w / max) * 100)}%` }} />}</td><td className="w-[42%] tabular-nums py-1.5 text-right align-top text-navy-900 [overflow-wrap:anywhere]">{v}</td></tr>
+      {rows.map(([l, v]) => (
+        <tr key={l}><td className="py-1.5 pe-3 text-navy-700 hyphens-auto [overflow-wrap:anywhere]">{l}</td><td className="w-[42%] tabular-nums py-1.5 text-right align-top text-navy-900 [overflow-wrap:anywhere]">{v}</td></tr>
       ))}
     </tbody></table>
   );

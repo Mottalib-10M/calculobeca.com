@@ -14,7 +14,9 @@ export function getStaticPaths() {
 const { lang, name } = Astro.params as { lang: Lang; name: keyof typeof EMBEDS };
 const e = EMBEDS[name];
 const page = `${SITE_URL}${route(hasRoute(e.page, lang) ? e.page : 'home', lang)}`;
-const note = { es: 'Sitio independiente, no es el Ministerio de Educación ni gestiona la solicitud · basado en datos de la Agencia Estatal Boletín Oficial del Estado (www.boe.es), releídos el 8 de noviembre de 2026 · herramienta de Radif Partners', en: 'Independent site, not the Ministry of Education, handles no applications · based on data from the Agencia Estatal Boletín Oficial del Estado (www.boe.es), re-read on 8 November 2026 · tool by Radif Partners' }[lang];
+// RECETTE §12.1 r. 3 : l'attribution BOE porte son lien jusque dans l'iframe (audit du 2026-11-09).
+const boe = '<a href="https://www.boe.es" rel="nofollow noopener" target="_blank" class="underline">www.boe.es</a>';
+const note = { es: `Sitio independiente, no es el Ministerio de Educación ni gestiona la solicitud · basado en datos de la Agencia Estatal Boletín Oficial del Estado (${boe}), releídos el 8 de noviembre de 2026 · herramienta de Radif Partners`, en: `Independent site, not the Ministry of Education, handles no applications · based on data from the Agencia Estatal Boletín Oficial del Estado (${boe}), re-read on 8 November 2026 · tool by Radif Partners` }[lang];
 ---
 <!doctype html>
 <html lang={LANG_TAGS[lang]}>
@@ -28,6 +30,6 @@ const note = { es: 'Sitio independiente, no es el Ministerio de Educación ni ge
   </head>
   <body class="bg-white p-2 text-navy-900">
     <main><Tool kind={e.kind} lang={lang} idPrefix="embed" /></main>
-    <p class="mt-2 text-center text-xs text-navy-600"><a href={page} target="_blank" rel="noopener" class="underline">{SITE_NAMES[lang]}</a> · {note}</p>
+    <p class="mt-2 text-center text-xs text-navy-600"><a href={page} target="_blank" rel="noopener" class="underline">{SITE_NAMES[lang]}</a> · <Fragment set:html={note} /></p>
   </body>
 </html>

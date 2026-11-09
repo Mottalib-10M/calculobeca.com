@@ -1,15 +1,33 @@
 ---
-/** Le corps HTML d'un fichier de contenu, ses mini-simulateurs rendus en îlots. */
+/**
+ * Le corps HTML d'un fichier de contenu, ses mini-simulateurs rendus en îlots.
+ * `plegar` (pages de sujet) : la première partie H2 reste ouverte, les suivantes se replient sous leur titre
+ * cliquable (<details>, tout reste dans le HTML). Testeurs du 2026-11-08 : 12 à 17 écrans de téléphone par page,
+ * et ce qui les aidait (« Antes del próximo plazo », la distance pour la residencia) était tout en bas.
+ * Un mini-simulateur dont l'outil complet est la page elle-même n'a pas de lien « Abrir la calculadora completa » vers elle.
+ */
 import MiniSim from './calc/MiniSim';
 import { miniHref } from '../lib/mini-targets';
 import type { Lang } from '../lib/format';
-interface Props { html: string; path: string; lang: Lang }
-const { html, path, lang } = Astro.props;
-const parts = html.split(/<!--mini:([A-Za-z0-9_]+)(?:\|([A-Za-z0-9+/=]+))?-->/);
+interface Props { html: string; path: string; lang: Lang; plegar?: boolean }
+const { html, path, lang, plegar = false } = Astro.props;
 const decode = (b?: string) => (b ? Buffer.from(b, 'base64').toString('utf8') : undefined);
+const morceaux = (h: string) => h.split(/<!--mini:([A-Za-z0-9_]+)(?:\|([A-Za-z0-9+/=]+))?-->/);
+// Sections : ce qui précède le premier H2, puis une section par H2.
+const sections = plegar ? html.split(/(?=<h2[\s>])/) : [html];
+const premierH2 = sections.findIndex((x) => /^<h2[\s>]/.test(x));
+const plie = (i: number) => plegar && premierH2 >= 0 && i > premierH2;
+const titre = (x: string) => { const m = x.match(/^<h2[^>]*>([\s\S]*?)<\/h2>/); return m ? { h: m[1], reste: x.slice(m[0].length) } : { h: '', reste: x }; };
 ---
 <div class="prose prose-slate max-w-none">
-  {parts.map((p, i) => i % 3 === 0 ? <Fragment set:html={p ?? ''} />
-    : i % 3 === 1 ? <div data-chrome class="not-prose"><MiniSim client:load kind={p} lang={lang} arg={decode(parts[i + 1])} href={miniHref(p, lang, path)} /></div>
-    : null)}
+  {sections.map((sec, si) => {
+    const t = plie(si) ? titre(sec) : { h: '', reste: sec };
+    const parts = morceaux(t.reste);
+    const contenu = parts.map((p, i) => i % 3 === 0 ? <Fragment set:html={p ?? ''} />
+      : i % 3 === 1 ? <div data-chrome class="not-prose"><MiniSim client:load kind={p} lang={lang} arg={decode(parts[i + 1])} href={miniHref(p, lang, path) === path ? undefined : miniHref(p, lang, path)} /></div>
+      : null);
+    return plie(si)
+      ? <details class="fold"><summary><h2 class="fold-h" set:html={t.h} /></summary><div class="pb-2">{contenu}</div></details>
+      : <Fragment>{contenu}</Fragment>;
+  })}
 </div>

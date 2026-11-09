@@ -34,7 +34,7 @@ ${h.table(['Situación', 'Beca de matrícula'], [
   ['Bachillerato o formación profesional', 'No existe: hay beca básica'],
   [`Renta por encima del umbral 3 (${h.eur(u4.u3)} con 4 miembros)`, 'No'],
 ], 'Beca de matrícula, convocatoria 2026-2027', ['l', 'l'])}
-${h.mini('umbrales', { p: ['miembros', 'renta'], t: '¿Tu familia queda dentro del umbral 3?' })}
+${h.mini('umbrales', { p: ['miembros', 'renta'], t: '¿En qué umbral queda tu familia? Del 1 al 3, matrícula gratis' })}
 <h2>El precio del crédito</h2>
 <p>Cada comunidad aprueba para cada curso un decreto de precios públicos de sus universidades, distinto por rama, por tipo de estudios y por número de matrícula. Para conocer tu precio, busca el decreto de tu comunidad o la tabla de tasas de tu universidad. La calculadora multiplica tus créditos por ese precio; el valor por defecto es solo un ejemplo y no corresponde a ninguna universidad concreta.</p>
 <h2>Si cobras solo la matrícula</h2>
@@ -66,7 +66,7 @@ ${h.table(['Situation', 'Tuition waiver'], [
   ['Upper secondary or vocational training', 'None: there is a basic grant'],
   [`Income above threshold 3 (${h.eur(u4.u3)} with 4 members)`, 'No'],
 ], 'Tuition waiver, 2026-2027 call', ['l', 'l'])}
-${h.mini('umbrales', { p: ['miembros', 'renta'], t: 'Is your household within threshold 3?' })}
+${h.mini('umbrales', { p: ['miembros', 'renta'], t: 'Which threshold is your household in? From 1 to 3, free tuition' })}
 <h2>The price per credit</h2>
 <p>Each region passes a public fees decree for every academic year for its universities, varying by field, type of studies and how many times a subject has been taken. To find your price, look up your region's decree or your university's fee table. The calculator multiplies your credits by that price; the default value is only an example and does not belong to any particular university.</p>
 <h2>If tuition is all you get</h2>

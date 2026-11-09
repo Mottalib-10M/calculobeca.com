@@ -25,14 +25,14 @@ export default defineGuide({
     ],
     body: (h) => `<h2>Las piezas y su umbral</h2>
 ${h.table(['Pieza', 'Importe', 'Hasta', 'Para'], [
-  ['Beca de matrícula', 'Precio de los créditos de 1.ª matrícula', 'Umbral 3', 'Grado, máster, enseñanzas artísticas superiores'],
-  ['Cuantía ligada a la renta', h.eur(C.renta), 'Umbral 1', 'Presencial y matrícula completa'],
-  ['Cuantía ligada a la residencia', h.eur(C.residencia), 'Umbral 2', 'Presencial, completa, viviendo fuera'],
-  ['Beca básica', `${h.eur(C.basica)} (${h.eur(C.basicaGradoBasico)} grado básico)`, 'Umbral 3', 'Estudios no universitarios'],
-  ['Excelencia académica', `${h.eur(C.excelencia[0].importe)} a ${h.eur(C.excelencia[C.excelencia.length - 1].importe)}`, 'Umbral 3', 'Matrícula completa, media de 8 o más'],
-  ['Cuantía variable', `${h.eur(C.variableMin)} como mínimo`, 'Umbral 2', 'Según fórmula'],
+  ['Matrícula gratis (beca de matrícula)', 'Precio de los créditos de 1.ª matrícula', 'Umbral 3', 'Grado, máster, enseñanzas artísticas superiores'],
+  ['Ayuda por renta baja (cuantía de renta)', h.eur(C.renta), 'Umbral 1', 'Presencial y curso completo'],
+  ['Ayuda por vivir fuera de casa (residencia)', h.eur(C.residencia), 'Umbral 2', 'Presencial, curso completo, viviendo fuera de casa'],
+  ['Beca básica (estudios no universitarios)', `${h.eur(C.basica)} (${h.eur(C.basicaGradoBasico)} grado básico)`, 'Umbral 3', 'Estudios no universitarios'],
+  ['Premio por buena nota (excelencia)', `${h.eur(C.excelencia[0].importe)} a ${h.eur(C.excelencia[C.excelencia.length - 1].importe)}`, 'Umbral 3', 'Matrícula completa, media de 8 o más'],
+  ['Extra que se reparte al final (parte variable)', `${h.eur(C.variableMin)} como mínimo`, 'Umbral 2', 'Un reparto al final del curso'],
 ], 'Real Decreto 179/2026, artículos 3 y 4; convocatoria, artículo 11', ['l', 'r', 'l', 'l'])}
-<p>Lo que manda es la combinación de tus estudios, tu umbral y tu forma de matrícula. Un estudiante de grado del umbral 1 que vive fuera de casa y tiene una media de 7 suma ${h.eur(C.renta + C.residencia)} de cuantías fijas, la matrícula gratis y la parte variable. Si su familia pasa al umbral 2, pierde los ${h.eur(C.renta)} de la renta pero conserva la residencia. En el umbral 3 solo le queda la matrícula y, si saca un 8, la excelencia.</p>
+<p>Lo que manda es la combinación de tus estudios, tu umbral y tu forma de matrícula. Un estudiante de grado del umbral 1 que vive fuera de casa y tiene una media de 7 suma ${h.eur(C.renta + C.residencia)} de cuantías fijas (${h.eur(C.renta + C.residencia + C.variableMin)} con el mínimo de la parte variable: lo que da la calculadora de arriba en el umbral 1 si marcas que vivirás fuera de casa), la matrícula gratis y el resto de la parte variable. Si su familia pasa al umbral 2, pierde los ${h.eur(C.renta)} de la renta pero conserva la residencia. En el umbral 3 solo le queda la matrícula y, si saca un 8, la excelencia.</p>
 ${h.mini('umbrales', { p: ['miembros', 'renta'], t: '¿No sabes tu umbral? Calcúlalo con dos datos' })}
 <h2>La excelencia académica</h2>
 <p>La pieza de excelencia exige matrícula completa y se concede hasta el umbral 3. La nota que cuenta depende del curso: en primero de grado, la nota de acceso; en los demás cursos, la media del anterior. A partir de segundo de grado y en primero de máster, la nota se multiplica por ${h.n(C.coefExcelencia.ingenieria, 2)} en ingeniería y arquitectura, ${h.n(C.coefExcelencia.ciencias, 2)} en ciencias y ${h.n(C.coefExcelencia.salud, 2)} en ciencias de la salud. La ${h.a('nota', 'calculadora de nota media')} lo aplica.</p>
@@ -66,7 +66,7 @@ ${h.table(['Component', 'Amount', 'Up to', 'For'], [
   ['Academic excellence', `${h.eur(C.excelencia[0].importe)} to ${h.eur(C.excelencia[C.excelencia.length - 1].importe)}`, 'Threshold 3', 'Full enrolment, average of 8 or more'],
   ['Variable amount', `${h.eur(C.variableMin)} minimum`, 'Threshold 2', 'By formula'],
 ], 'Royal Decree 179/2026, articles 3 and 4; call, article 11', ['l', 'r', 'l', 'l'])}
-<p>What decides is the mix of your studies, your threshold and how you enrol. A threshold-1 degree student living away from home with a 7 average gets ${h.eur(C.renta + C.residencia)} in fixed amounts, free tuition and the variable share. If the family moves to threshold 2, the ${h.eur(C.renta)} income-linked amount goes but the residence amount stays. At threshold 3 only tuition remains, plus excellence with an 8.</p>
+<p>What decides is the mix of your studies, your threshold and how you enrol. A threshold-1 degree student living away from home with a 7 average gets ${h.eur(C.renta + C.residencia)} in fixed amounts (${h.eur(C.renta + C.residencia + C.variableMin)} with the variable minimum: what the calculator above gives at threshold 1 if you say you will live away from home), free tuition and the rest of the variable share. If the family moves to threshold 2, the ${h.eur(C.renta)} income-linked amount goes but the residence amount stays. At threshold 3 only tuition remains, plus excellence with an 8.</p>
 ${h.mini('umbrales', { p: ['miembros', 'renta'], t: 'Not sure of your threshold? Two figures are enough' })}
 <h2>Academic excellence</h2>
 <p>The excellence component requires full enrolment and is granted up to threshold 3. The grade that counts depends on the year: in the first year of a degree, the university entry grade; in later years, the previous year's average. From the second year of a degree and in the first year of a master's, the grade is multiplied by ${h.n(C.coefExcelencia.ingenieria, 2)} in engineering and architecture, ${h.n(C.coefExcelencia.ciencias, 2)} in sciences and ${h.n(C.coefExcelencia.salud, 2)} in health sciences. The ${h.a('nota', 'grade average calculator')} applies it.</p>

@@ -37,7 +37,7 @@ const fecha = (iso: string) => displayDate(iso, lang === 'es' ? 'es-ES' : 'en-GB
     <p class="mt-2 text-base text-navy-700 sm:text-lg">{x.intro}</p>
   </header>
   <AvisoPlazo lang={lang} />
-  <div data-outil data-chrome><Tool kind="beca" lang={lang} idPrefix="home" /></div>
+  <div id="simulador" data-outil data-chrome class="scroll-mt-20"><Tool kind="beca" lang={lang} idPrefix="home" /></div>
   <p class="mt-2 text-sm text-navy-600" data-chrome>{ui.privacyLine}</p>
   <Clamp text={x.resume} lang={lang} id="clamp-home" class="my-8" />
   <section class="mt-8">
@@ -52,10 +52,13 @@ const fecha = (iso: string) => displayDate(iso, lang === 'es' ? 'es-ES' : 'en-GB
     </ol>
   </section>
   <section class="mt-10"><Body html={x.why(h)} path={path} lang={lang} /></section>
-  <section class="mt-10" data-chrome>
+  {/* La table des umbrales est déjà dans le résultat du simulateur pour la famille saisie : celle de 1 à 6 personnes se replie
+       (test naïf du 2026-11-08 : « la deuxième fois que je vois ces chiffres »). */}
+  <details class="fold mt-10" data-chrome>
+    <summary><h2 class="fold-h">{L('Umbrales para otras familias, de 1 a 6 personas', 'Thresholds for other households, 1 to 6 people')}</h2></summary>
     <Fragment set:html={tabla} />
-    <p class="text-sm text-navy-600"><a href={route('umbrales', lang)} class="font-medium text-accent-700 underline">{L('Tabla completa, de 1 a 8 miembros y más', 'Full table, 1 to 8 members and more')}</a></p>
-  </section>
+    <p class="pb-4 text-sm text-navy-600"><a href={route('umbrales', lang)} class="font-medium text-accent-700 underline">{L('Tabla completa, de 1 a 8 miembros y más', 'Full table, 1 to 8 members and more')}</a></p>
+  </details>
   <section class="mt-10" data-chrome>
     <h2 class="text-2xl font-bold text-navy-900">{x.datesTitle}</h2>
     <p class="mt-1 text-sm text-navy-600">{x.datesNote}</p>
@@ -66,14 +69,15 @@ const fecha = (iso: string) => displayDate(iso, lang === 'es' ? 'es-ES' : 'en-GB
   </section>
   <section class="mt-10" data-chrome>
     <h2 class="text-2xl font-bold text-navy-900">{x.guidesTitle}</h2>
-    <div class="mt-4 grid gap-6 md:grid-cols-3">
-      {GROUPS.map((g) => (
-        <div>
-          <h3 class="text-sm font-semibold uppercase tracking-wide text-accent-700">{g.label[lang]}</h3>
+    <div class="mt-4 grid gap-x-6 md:grid-cols-3">
+      {GROUPS.map((g, gi) => (
+        <details class="fold" open={gi === 0}>
+          <summary><h3 class="fold-h">{g.label[lang]} ({GUIDES.filter((p) => p.group === g.id && hasRoute(p.id, lang)).length})</h3></summary>
+          {/* Des cartes cliquables, comme « Para seguir » : en texte noir, la liste ne se lisait pas comme des liens (test naïf). */}
           <ul class="mt-2 space-y-2 text-sm">
-            {GUIDES.filter((p) => p.group === g.id && hasRoute(p.id, lang)).map((p) => <li><a href={route(p.id, lang)} class="font-medium text-navy-900 underline-offset-2 hover:underline">{p[lang].nav}</a><span class="block text-navy-600">{p[lang].card}</span></li>)}
+            {GUIDES.filter((p) => p.group === g.id && hasRoute(p.id, lang)).map((p) => <li><a href={route(p.id, lang)} class="block rounded-lg border border-navy-200 px-3 py-2 hover:border-accent-300 hover:bg-accent-50"><span class="font-semibold text-accent-700 underline underline-offset-2">{p[lang].nav} →</span><span class="block text-navy-600">{p[lang].card}</span></a></li>)}
           </ul>
-        </div>
+        </details>
       ))}
     </div>
     <p class="mt-6 text-sm text-navy-700"><a href={route('method', lang)} class="font-medium text-accent-700 underline">{L('Cómo calcula el simulador y de dónde salen las cifras', 'How the simulator calculates and where the figures come from')}</a> · <a href={route('about', lang)} class="font-medium text-accent-700 underline">{L('Quién publica este sitio', 'Who publishes this site')}</a></p>

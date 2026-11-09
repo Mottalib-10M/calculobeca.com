@@ -35,11 +35,14 @@ const read = { es: `Cifras releídas en el BOE y en la convocatoria el ${gel}`, 
       <h1 class="text-[1.7rem] font-bold text-navy-900 max-sm:leading-tight sm:text-3xl md:text-4xl">{x.h1}</h1>
       <p class="mt-1 text-xs font-medium uppercase tracking-wide text-navy-500">{ui.independent}</p>
       <p class="mt-2 text-base text-navy-700 sm:text-lg">{x.intro}</p>
+      {/* Parcours débutant (testeurs du 2026-11-08 : arrivés de Google sur une page de détail, ils ne savaient pas par où commencer). */}
+      {!(page.tool === 'beca' && !page.toolArg) && <p data-chrome class="mt-1 text-sm"><a href={`${route('home', lang)}#simulador`} class="font-medium text-accent-700 underline">{lang === 'es' ? '¿No sabes por dónde empezar? El simulador completo, con tres preguntas →' : 'Not sure where to start? The full simulator, in three questions →'}</a></p>}
     </header>
-    {page.id === 'calendario' && <AvisoPlazo lang={lang} enlace={false} />}
+    {/* Version courte partout, calendrier compris : la longue repoussait le premier champ sous l'écran du téléphone ; le résultat du calendrier dit déjà le prochain pas et la tabla garde la solicitud tardía. */}
+    <AvisoPlazo lang={lang} corto />
     <div data-outil data-chrome class="mb-4"><Tool kind={page.tool} lang={lang} arg={page.toolArg} idPrefix={`p${page.order}`} /></div>
     <p class="mb-6 text-sm text-navy-600">{ui.reviewedBy} <a href={route('about', lang)} class="underline hover:text-navy-900">{AUTHOR_NAME}</a> · <a href={route('method', lang)} class="underline hover:text-navy-900">{label('method', lang)}</a> · {read}</p>
     <Clamp text={x.resume} lang={lang} id={`clamp-${page.id}`} class="mb-8" />
-    <Body html={x.body(helpers(lang))} path={path} lang={lang} />
+    <Body html={x.body(helpers(lang))} path={path} lang={lang} plegar />
   </article>
 </PageLayout>

@@ -208,7 +208,7 @@ describe('8. FAQ repliée', () => {
 describe('9. champs repliés : valeur actuelle visible', () => {
   it('le titre du repli dit « Ahora: … » avec chaque valeur cachée', () => {
     const h = renderToStaticMarkup(createElement(SpecTool, { kind: 'beca', lang: 'es' }));
-    expect(h).toContain('Más datos de tu caso');
+    expect(h).toContain('Lo que hemos supuesto por ti');
     expect(h).toMatch(/data-actuellement[^>]*>Ahora: Matrícula /);
     const repli = h.slice(h.indexOf('<details data-repli'));
     expect(repli).toContain('id="t-mat"');

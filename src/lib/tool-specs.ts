@@ -26,7 +26,9 @@ const A = P.academico, CU = P.cuantias, CV = P.convocatoria;
 const RD = 'RD 179/2026';
 /* Liens écrits en dur (importer i18n/routes ferait une boucle : routes → pages → guides → tool-specs). check-liens les vérifie. */
 const RENTA_LINK = (l: Lang) => ({ href: l === 'es' ? '/es/renta-familiar/' : '/en/family-income/', text: T(l, '¿No la sabes? Calcúlala aquí', 'Not sure? Work it out here') });
-const RENTA_HELP = (l: Lang) => T(l, 'Para el curso 2026-2027 cuenta la renta de 2025. No es el sueldo: en la declaración de la renta de 2025 de cada miembro, base imponible general + base del ahorro − cuota resultante, y se suman.', 'For 2026-2027 the 2025 income counts. Not your pay: on each member\'s 2025 tax return, general tax base + savings tax base − tax due, added together.');
+/* Test naïf du 2026-11-08 : « base imponible… » = mots de Hacienda. D'abord à qui demander et une approximation, puis l'année ; la formule exacte vit sur la page de renta familiar. */
+const RENTA_HELP = (l: Lang) => T(l, 'Lo que ganó la familia en el año, ya sin impuestos: pide a tus padres su declaración de la renta. Si no la tenéis a mano, pon lo que cobráis al año entre todos, una vez pagados impuestos y Seguridad Social: es una aproximación, y la cifra oficial suele salir algo más baja. Para la beca 2026-2027 cuenta el año 2025; para la 2027-2028, si no cambia la regla, el 2026.', 'What the family earned in the year, after tax: ask your parents for their tax return. If you do not have it to hand, enter what you all take home in a year after tax and social security: it is an approximation, and the official figure usually comes out a little lower. For the 2026-2027 grant, 2025 counts; for 2027-2028, unless the rule changes, 2026.');
+const RENTA_LABEL = (l: Lang) => T(l, 'Renta de la familia en un año (2025)', 'Family income for one year (2025)');
 const MIEMBROS = (l: Lang) => T(l, 'Personas que cuentan en la familia', 'People counted in the household');
 const ESTUDIO_HELP = (l: Lang) => T(l, 'El grado incluye las enseñanzas artísticas superiores.', 'Degree includes higher arts education.');
 /** Lo que se pierde al pasar al umbral siguiente (cuantías del RD 179/2026). */
@@ -71,16 +73,19 @@ const insOpts = (l: Lang) => [
   { value: 'menorPeninsula', label: T(l, 'Isla menor citada arriba, y estudio en la Península', 'One of the smaller islands above, studying on the mainland') },
 ];
 const discOpts = (l: Lang) => [{ value: 'no', label: T(l, 'Sin discapacidad o menos del 25 %', 'None, or under 25%') }, { value: 'd25', label: T(l, 'Del 25 % al 64 %', '25% to 64%') }, { value: 'd65', label: T(l, '65 % o más', '65% or more') }];
-const umbralName = (u: number, l: Lang) => (u === 4 ? T(l, 'Por encima del umbral 3', 'Above threshold 3') : T(l, `Umbral ${u}`, `Threshold ${u}`));
+/** « Umbral 2 de 3 » : le chiffre seul ne disait pas si c'était bien (test naïf du 2026-11-08). */
+const umbralName = (u: number, l: Lang) => (u === 4 ? T(l, 'Por encima del umbral 3: sin beca', 'Above threshold 3: no grant') : T(l, `Umbral ${u} de 3`, `Threshold ${u} of 3`));
+const UMBRAL_ROW = (l: Lang) => T(l, 'Tu umbral de renta (el 1 es el que más da)', 'Your income threshold (1 gives the most)');
 export const compName = (c: B.Comp, l: Lang) => ({
-  matricula: T(l, 'Beca de matrícula', 'Tuition waiver'),
-  renta: T(l, 'Cuantía fija ligada a la renta', 'Fixed income-linked amount'),
-  residencia: T(l, 'Cuantía fija ligada a la residencia', 'Fixed residence amount'),
-  basica: T(l, 'Beca básica', 'Basic grant'),
-  excelencia: T(l, 'Cuantía ligada a la excelencia', 'Academic excellence amount'),
-  variable: T(l, 'Parte variable (mínimo seguro)', 'Variable amount (guaranteed minimum)'),
-  variableMin: T(l, 'Parte variable mínima', 'Minimum variable amount'),
-  insular: T(l, 'Cuantía adicional por insularidad', 'Island supplement'),
+  // Noms de tous les jours, terme officiel entre parenthèses (test naïf du 2026-11-08 : « cuantía fija ligada a… »).
+  matricula: T(l, 'Matrícula gratis (beca de matrícula)', 'Free tuition (tuition waiver)'),
+  renta: T(l, 'Ayuda por renta baja (cuantía de renta)', 'Low-income amount (income-linked)'),
+  residencia: T(l, 'Ayuda por vivir fuera de casa (residencia)', 'Living-away amount (residence)'),
+  basica: T(l, 'Beca básica (estudios no universitarios)', 'Basic grant (below university)'),
+  excelencia: T(l, 'Premio por buena nota (excelencia)', 'Good-grade award (excellence)'),
+  variable: T(l, 'Extra que se reparte al final (mínimo seguro)', 'Extra shared out at the end (guaranteed minimum)'),
+  variableMin: T(l, 'Extra que se reparte al final (mínimo)', 'Extra shared out at the end (minimum)'),
+  insular: T(l, 'Suplemento por vivir en una isla, Ceuta o Melilla', 'Island, Ceuta or Melilla supplement'),
 }[c]);
 const motivo = (m: string | undefined, l: Lang) => ({
   umbral: T(l, 'La renta familiar supera el umbral 3: no hay ningún componente de beca.', 'Family income is above threshold 3: no grant component at all.'),
@@ -92,7 +97,7 @@ const motivo = (m: string | undefined, l: Lang) => ({
 function becaInputs(l: Lang, a?: Args): Input[] {
   const out: Input[] = [
     { id: 'miembros', label: MIEMBROS(l), def: Number(a?.miembros ?? 4), max: 20, help: T(l, 'Tú, tus padres, tus hermanos solteros menores de 25 que viven en casa y los abuelos empadronados', 'You, your parents, unmarried siblings under 25 living at home and registered grandparents') },
-    { id: 'renta', label: T(l, 'Renta de la familia en 2025, la que cuenta para la beca', 'Family income for 2025, as counted for the grant'), def: Number(a?.renta ?? 30000), unit: '€', max: 1e7, help: RENTA_HELP(l), link: RENTA_LINK(l) },
+    { id: 'renta', label: RENTA_LABEL(l), def: Number(a?.renta ?? 30000), unit: '€', max: 1e7, help: RENTA_HELP(l), link: RENTA_LINK(l) },
   ];
   if (!a?.estudio) out.push({ kind: 'select', id: 'estudio', label: T(l, 'Qué vas a estudiar en 2026-2027', 'What you will study in 2026-2027'), def: String(a?.defEstudio ?? 'grado'), options: estudioOpts(l), help: ESTUDIO_HELP(l), wide: true });
   out.push(
@@ -103,7 +108,7 @@ function becaInputs(l: Lang, a?: Args): Input[] {
     { kind: 'choice', id: 'mod', label: T(l, 'Modalidad', 'Mode'), def: 'presencial', options: modOpts(l), help: T(l, 'Presencial incluye semipresencial (artículo 7).', 'In person includes blended study (article 7).'), adv: true, wide: true },
     { kind: 'select', id: 'rama', label: T(l, 'Rama de conocimiento', 'Field of study'), def: String(a?.rama ?? 'sociales'), options: ramaOpts(l), adv: true },
     { id: 'aprob', label: T(l, 'Créditos o módulos aprobados el curso pasado', 'Credits or modules passed last year'), def: 100, unit: '%', max: 100, adv: true, help: T(l, 'Sobre los matriculados; solo cuenta de 2.º en adelante', 'Out of those enrolled; only counts from year 2') },
-    { id: 'pat', label: T(l, 'Patrimonio: suma de porcentajes', 'Wealth: sum of percentages'), def: 0, unit: '%', max: 1000, adv: true, help: T(l, 'Lo da la calculadora de patrimonio; por encima de 100 se deniega', 'From the wealth calculator; above 100 means refusal') },
+    { id: 'pat', label: T(l, 'Pisos, fincas o ahorros aparte de la vivienda (0 = ninguno)', 'Flats, land or savings besides the home (0 = none)'), def: 0, unit: '%', max: 1000, adv: true, help: T(l, 'Es la «suma de porcentajes» que da la calculadora de patrimonio; por encima de 100 se deniega la beca', 'The «sum of percentages» from the wealth calculator; above 100 the grant is refused') },
     { kind: 'select', id: 'ins', label: T(l, 'Domicilio insular, Ceuta o Melilla', 'Island home, Ceuta or Melilla'), def: 'no', options: insOpts(l), adv: true, wide: true },
     { kind: 'choice', id: 'can', label: T(l, '¿Domicilio en Canarias?', 'Home in the Canary Islands?'), def: 'no', options: ny(l), adv: true },
     { kind: 'select', id: 'disc', label: T(l, 'Discapacidad del estudiante', "Student's disability"), def: 'no', options: discOpts(l), adv: true },
@@ -133,15 +138,15 @@ function becaSpec(l: Lang, a?: Args): ToolSpec {
       const x = becaIn(v, a), r = B.beca(x);
       const u = r.u;
       const rows: Array<[string, string, number?]> = r.ok ? lineRows(r, l) : [[T(l, 'Motivo', 'Reason'), motivo(r.motivo, l)]];
-      rows.push([T(l, 'Umbral alcanzado (el 1 es el más favorable)', 'Threshold reached (1 is the best)'), umbralName(r.umbral, l)]);
+      rows.push([UMBRAL_ROW(l), umbralName(r.umbral, l)]);
       // Une seule phrase-réponse : oui ou non, puis le dinero seguro (fixes + minimum variable) et ce que le umbral fait perdre.
       const seguro = r.fijo > 0 ? T(l, ` Dinero seguro: ${eur(r.fijo, l)}`, ` Guaranteed money: ${eur(r.fijo, l)}`) : '';
-      const incl = r.variable === 'no' ? '' : r.fijo === CU.variableMin ? T(l, ', el mínimo de la parte variable', ', the minimum of the variable amount') : T(l, `, que incluye el mínimo de ${eur(CU.variableMin, l)} de la parte variable`, `, including the ${eur(CU.variableMin, l)} minimum of the variable amount`);
-      const resto = r.variable === 'formula' ? T(l, '. El resto de la parte variable se reparte al final del curso y nadie puede predecirlo al euro.', '. The rest of the variable amount is shared out at the end of the year and nobody can predict it to the euro.') : r.fijo > 0 ? '.' : '';
-      const sinRenta = r.umbral === 2 || r.umbral === 3 ? T(l, ` En el umbral ${r.umbral} no hay los ${eur(CU.renta, l)} ligados a la renta: solo llegan al umbral 1.`, ` At threshold ${r.umbral} there is no ${eur(CU.renta, l)} income-linked amount: it only reaches threshold 1.`) : '';
+      const incl = r.variable === 'no' ? '' : r.fijo === CU.variableMin ? T(l, ', el mínimo del extra que se reparte al final del curso', ', the minimum of the extra shared out at the end of the year') : T(l, `, que incluye ${eur(CU.variableMin, l)} de mínimo del extra que se reparte al final del curso`, `, including the ${eur(CU.variableMin, l)} minimum of the extra shared out at the end of the year`);
+      const resto = r.variable === 'formula' ? T(l, '. El resto de ese extra nadie puede predecirlo al euro.', '. Nobody can predict the rest of that extra to the euro.') : r.fijo > 0 ? '.' : '';
+      const sinRenta = r.umbral === 2 || r.umbral === 3 ? T(l, ` La ayuda de ${eur(CU.renta, l)} por renta baja es solo para el umbral 1: con ${int(x.miembros, l)} personas, hasta ${eur(u.u1, l)}.`, ` The ${eur(CU.renta, l)} low-income amount is for threshold 1 only: for ${int(x.miembros, l)} people, up to ${eur(u.u1, l)}.`) : '';
       const mat = r.matricula ? T(l, ' La matrícula gratis no es dinero en tu cuenta: la universidad no te cobra los créditos nuevos.', ' Free tuition is not money in your account: the university does not charge you for first-time credits.') : '';
       const sub = r.ok ? `${T(l, 'Sí, tendrías beca.', 'Yes, you would get a grant.')}${seguro}${incl}${resto}${sinRenta}${mat}` : motivo(r.motivo, l);
-      const basicaFuera = T(l, 'beca básica solo fuera de la universidad', 'basic grant only below university level');
+      const basicaFuera = T(l, 'beca básica solo en FP, bachillerato y otros estudios no universitarios', 'basic grant only below university level');
       return {
         label: T(l, 'Tu beca estimada 2026-2027', 'Your estimated grant 2026-2027'),
         value: !r.ok ? T(l, 'Sin beca', 'No grant') : r.matricula ? (r.fijo > 0 ? T(l, `Matrícula gratis + ${eur(r.fijo, l)}`, `Free tuition + ${eur(r.fijo, l)}`) : T(l, 'Matrícula gratis', 'Free tuition')) : eur(r.fijo, l),
@@ -150,8 +155,8 @@ function becaSpec(l: Lang, a?: Args): ToolSpec {
           caption: T(l, `Umbrales de renta para ${int(x.miembros, l)} personas en la familia`, `Income thresholds for a household of ${int(x.miembros, l)}`),
           headers: [T(l, 'Umbral', 'Threshold'), T(l, 'Renta máxima', 'Maximum income'), T(l, 'Qué da', 'What it gives')],
           rows: [
-            ['1', eur(u.u1, l), T(l, `Todo: ${eur(CU.renta, l)} por renta, residencia, excelencia, parte variable y matrícula gratis`, `Everything: ${eur(CU.renta, l)} income-linked, residence, excellence, variable amount and free tuition`)],
-            ['2', eur(u.u2, l), T(l, `Residencia, excelencia, parte variable y matrícula gratis (${basicaFuera})`, `Residence, excellence, variable amount and free tuition (${basicaFuera})`)],
+            ['1', eur(u.u1, l), T(l, `Todo: ${eur(CU.renta, l)} por renta baja, residencia, excelencia, extra del final y matrícula gratis`, `Everything: ${eur(CU.renta, l)} low-income, residence, excellence, end-of-year extra and free tuition`)],
+            ['2', eur(u.u2, l), T(l, `Residencia, excelencia, extra del final y matrícula gratis (${basicaFuera})`, `Residence, excellence, end-of-year extra and free tuition (${basicaFuera})`)],
             ['3', eur(u.u3, l), T(l, `Matrícula gratis y excelencia (${basicaFuera})`, `Free tuition and excellence (${basicaFuera})`)],
           ], align: ['l', 'r', 'l'],
         },
@@ -166,7 +171,7 @@ function umbralesSpec(l: Lang, a?: Args): ToolSpec {
   return {
     inputs: [
       { id: 'miembros', label: MIEMBROS(l), def: Number(a?.miembros ?? 4), max: 20 },
-      { id: 'renta', label: T(l, 'Renta de la familia en 2025, la que cuenta para la beca', 'Family income for 2025, as counted for the grant'), def: Number(a?.renta ?? 30000), unit: '€', max: 1e7, help: RENTA_HELP(l), link: RENTA_LINK(l) },
+      { id: 'renta', label: RENTA_LABEL(l), def: Number(a?.renta ?? 30000), unit: '€', max: 1e7, help: RENTA_HELP(l), link: RENTA_LINK(l) },
     ],
     run: (v) => {
       const m = Math.max(1, Math.floor(n(v, 'miembros'))), r = n(v, 'renta'), u = B.umbrales(m), um = B.umbralDe(r, m);
@@ -181,17 +186,12 @@ function umbralesSpec(l: Lang, a?: Args): ToolSpec {
         ? T(l, `Superas el umbral 3 en ${eur(r - u.u3, l)}: no hay beca general en 2026-2027.`, `You are ${eur(r - u.u3, l)} over threshold 3: no general grant in 2026-2027.`)
         : `${que} ${T(l, `Te quedan ${eur(lim - r, l)} de margen: con más renta ${pierde(um, l)}.`, `You have ${eur(lim - r, l)} of headroom: with more income ${pierde(um, l)}.`)}`;
       const rows: Array<[string, string, number?]> = [
-        [T(l, 'Umbral 1', 'Threshold 1'), eur(u.u1, l), u.u1], [T(l, 'Umbral 2', 'Threshold 2'), eur(u.u2, l), u.u2], [T(l, 'Umbral 3', 'Threshold 3'), eur(u.u3, l), u.u3],
+        [T(l, 'Límite del umbral 1', 'Threshold 1 limit'), eur(u.u1, l)], [T(l, 'Límite del umbral 2', 'Threshold 2 limit'), eur(u.u2, l)], [T(l, 'Límite del umbral 3', 'Threshold 3 limit'), eur(u.u3, l)],
       ];
+      // La table de 1 à 8 personnes vit une seule fois, dans le corps de la page (test naïf : « deux fois le même tableau »).
       return {
         label: T(l, `Tu umbral con ${int(m, l)} personas en la familia`, `Your threshold for a household of ${int(m, l)}`), value: umbralName(um, l), sub, rows,
-        table: {
-          caption: T(l, 'Umbrales de renta 2026-2027, en euros', 'Income thresholds 2026-2027, in euros'),
-          headers: [T(l, 'Personas', 'People'), T(l, 'Umbral 1', 'Threshold 1'), T(l, 'Umbral 2', 'Threshold 2'), T(l, 'Umbral 3', 'Threshold 3')],
-          rows: P.umbrales.tabla.map((t) => [int(t.m, l), eur(t.u1, l), eur(t.u2, l), eur(t.u3, l)]).concat([[T(l, 'Cada miembro más', 'Each extra member'), `+${eur(P.umbrales.adicional.u1, l)}`, `+${eur(P.umbrales.adicional.u2, l)}`, `+${eur(P.umbrales.adicional.u3, l)}`]]),
-          align: ['l', 'r', 'r', 'r'],
-        },
-        note: T(l, 'Igual al umbral cuenta como no superarlo. La renta es la de 2025, no la de este año.', 'Being exactly on the threshold counts as not exceeding it. The income is 2025 income, not this year\'s.'),
+        note: T(l, 'Si la renta es justo igual al límite, sigues dentro. Para la beca 2026-2027 cuenta la renta de 2025; para la 2027-2028, si no cambia la regla, la de 2026.', 'If income is exactly on the limit, you are still within it. For 2026-2027, 2025 income counts; for 2027-2028, unless the rule changes, 2026 income.'),
       };
     },
   };
@@ -201,8 +201,10 @@ function umbralesSpec(l: Lang, a?: Args): ToolSpec {
 const fnOpts = (l: Lang) => [{ value: 'no', label: T(l, 'No', 'No') }, { value: 'general', label: T(l, 'General', 'General') }, { value: 'especial', label: T(l, 'Especial', 'Special') }];
 function rentaSpec(l: Lang): ToolSpec {
   return {
+    // La renta calculée ici remplit le champ « Renta de la familia » des autres pages (« ¿No la sabes? Calcúlala aquí »).
+    comparte: (v) => ({ miembros: n(v, 'miembros'), renta: B.rentaFamiliar({ sustentadores: n(v, 'sust'), otros: n(v, 'otros'), fn: s(v, 'fn') as 'no', hermanosFn: n(v, 'hfn'), disc33: n(v, 'd33'), disc65: n(v, 'd65'), solicitanteUniv65: s(v, 'sol65') === 'si', fuera: n(v, 'fuera'), orfandad: s(v, 'orf') === 'si', monoparental: s(v, 'mono') === 'si' }).computable }),
     inputs: [
-      { id: 'sust', label: T(l, 'Renta de los padres (sustentadores)', "Parents' income (main earners)"), def: 32000, unit: '€', max: 1e7, help: T(l, 'Base imponible general + del ahorro − cuota resultante de la autoliquidación, de 2025', '2025 general + savings tax base − resulting tax due') },
+      { id: 'sust', label: T(l, 'Renta de los padres', "Parents' income"), def: 30000, unit: '€', max: 1e7, help: T(l, 'Base imponible general + del ahorro − cuota resultante de la autoliquidación, de 2025', '2025 general + savings tax base − resulting tax due') },
       { id: 'otros', label: T(l, 'Renta del resto de miembros', 'Income of the other members'), def: 0, unit: '€', max: 1e7, help: T(l, 'Hermanos, abuelos o tú mismo: cuenta la mitad', 'Siblings, grandparents or yourself: half counts') },
       { id: 'miembros', label: T(l, 'Miembros computables', 'Members counted'), def: 4, max: 20 },
       { kind: 'select', id: 'fn', label: T(l, 'Familia numerosa', 'Large family'), def: 'no', options: fnOpts(l), adv: true },
@@ -210,7 +212,7 @@ function rentaSpec(l: Lang): ToolSpec {
       { id: 'd33', label: T(l, 'Miembros con discapacidad del 33 al 64 %', 'Members with 33-64% disability'), def: 0, max: 20, adv: true },
       { id: 'd65', label: T(l, 'Miembros con discapacidad del 65 % o más', 'Members with 65%+ disability'), def: 0, max: 20, adv: true },
       { kind: 'choice', id: 'sol65', label: T(l, '¿Eres tú, universitario, uno de ellos?', 'Are you, a university student, one of them?'), def: 'no', options: ny(l), adv: true },
-      { id: 'fuera', label: T(l, 'Hijos estudiando fuera de casa (universidad)', 'Children studying away from home (university)'), def: 0, max: 20, adv: true, help: T(l, 'Solo deduce si son dos o más, tú incluido', 'Only deducted with two or more, including you') },
+      { id: 'fuera', label: T(l, 'Hijos en la universidad fuera de casa, tú incluido', 'Children at university away from home, including you'), def: 0, max: 20, adv: true, help: T(l, 'Solo baja la renta si son dos o más', 'Only lowers income with two or more') },
       { kind: 'choice', id: 'orf', label: T(l, '¿Orfandad absoluta?', 'Full orphan?'), def: 'no', options: ny(l), adv: true },
       { kind: 'choice', id: 'mono', label: T(l, '¿Familia monoparental?', 'Single-parent family?'), def: 'no', options: ny(l), adv: true },
     ],
@@ -223,10 +225,14 @@ function rentaSpec(l: Lang): ToolSpec {
       const um = B.umbralDe(r.computable, n(v, 'miembros'));
       const rows: Array<[string, string, number?]> = [[T(l, 'Renta sumada', 'Income added up'), eur(r.bruta, l)]];
       for (const [k, x] of r.deducciones) rows.push([`− ${lab[k]}`, eur(x, l), x]);
-      rows.push([T(l, 'Umbral con esta renta', 'Threshold with this income'), umbralName(um, l)]);
+      rows.push([T(l, `Umbral con ${int(n(v, 'miembros'), l)} personas`, `Threshold for ${int(n(v, 'miembros'), l)} people`), umbralName(um, l)]);
+      // Une rebaja qui ne s'applique pas le dit (test naïf : « 32.000 €, la même chose que ce que j'ai tapé »).
+      const sinRebaja = r.deducciones.length === 0
+        ? (n(v, 'fuera') === 1 ? T(l, ' Con un solo hijo fuera de casa no hay rebaja: hacen falta dos o más.', ' With only one child away from home there is no deduction: two or more are needed.') : T(l, ' Sin rebajas en tu caso: la renta que cuenta es la que has escrito.', ' No deductions in your case: the income that counts is the one you entered.'))
+        : '';
       return {
-        label: T(l, 'Renta familiar a efectos de beca', 'Family income for the grant'), value: eur(r.computable, l),
-        sub: T(l, `${RD}, arts. 9 y 10: deducciones aplicadas a la renta de 2025.`, `${RD}, arts. 9 and 10: deductions applied to 2025 income.`), rows,
+        label: T(l, 'Renta familiar que cuenta para la beca', 'Family income that counts for the grant'), value: eur(r.computable, l),
+        sub: T(l, `Renta de 2025 después de las rebajas por familia numerosa, discapacidad, hermanos fuera de casa y otras.${sinRebaja}`, `2025 income after the deductions for large families, disability, siblings away from home and others.${sinRebaja}`), rows,
         note: T(l, 'El Ministerio cruza los datos con la Agencia Tributaria: la cifra exacta es la suya.', 'The Ministry cross-checks with the Tax Agency: its figure is the one that counts.'),
       };
     },
@@ -269,9 +275,10 @@ function cuantiasSpec(l: Lang): ToolSpec {
   return {
     inputs: [
       { kind: 'select', id: 'estudio', label: T(l, 'Estudios', 'Studies'), def: 'grado', options: estudioOpts(l), help: ESTUDIO_HELP(l), wide: true },
-      { kind: 'select', id: 'um', label: T(l, 'Umbral de tu familia', 'Your household threshold'), def: '2', options: [1, 2, 3].map((u) => ({ value: String(u), label: umbralName(u, l) })), help: T(l, '¿No lo sabes? Lo calcula la portada o la calculadora de abajo; la tabla compara los tres.', 'Not sure? The home page or the calculator below works it out; the table compares all three.'), wide: true },
-      { kind: 'choice', id: 'fuera', label: T(l, '¿Fuera de casa?', 'Away from home?'), def: 'si', options: yn(l) },
-      { id: 'nota', label: T(l, 'Nota media', 'Average grade'), def: 7, max: 10, decimals: 2 },
+      { kind: 'select', id: 'um', label: T(l, 'Umbral de tu familia', 'Your household threshold'), def: '2', options: [1, 2, 3].map((u) => ({ value: String(u), label: umbralName(u, l) })), help: T(l, '¿No lo sabes? Si ya lo calculaste en otra página, aparece aquí; si no, la tabla de abajo compara los tres.', 'Not sure? If you worked it out on another page it appears here; otherwise the table below compares all three.'), wide: true },
+      // Mêmes réponses par défaut que la portada (« No », 7) : la même famille donne le même chiffre (test naïf du 2026-11-08).
+      { kind: 'choice', id: 'fuera', label: T(l, '¿Vivirás fuera de casa por el curso?', 'Will you live away from home for the year?'), def: 'no', options: ny(l) },
+      { id: 'nota', label: T(l, 'Nota de acceso en 1.º, o media del curso pasado', 'Entry grade in year 1, or last year\'s average'), def: 7, max: 10, decimals: 2 },
       { kind: 'select', id: 'mat', label: T(l, 'Matrícula', 'Enrolment'), def: 'completa', options: matOpts(l), adv: true, wide: true },
       { kind: 'choice', id: 'mod', label: T(l, 'Modalidad', 'Mode'), def: 'presencial', options: modOpts(l), help: T(l, 'Presencial incluye semipresencial (artículo 7).', 'In person includes blended study (article 7).'), adv: true, wide: true },
     ],
@@ -283,8 +290,12 @@ function cuantiasSpec(l: Lang): ToolSpec {
       const comps: B.Comp[] = ['renta', 'residencia', 'basica', 'excelencia', 'variable', 'variableMin'];
       const cell = (b: B.BecaOut, c: B.Comp) => { const x = b.lineas.find((y) => y.c === c); return x ? eur(x.importe, l) : '–'; };
       return {
-        label: T(l, `${umbralName(k, l)}: dinero seguro`, `${umbralName(k, l)}: guaranteed money`), value: r.fijo > 0 ? eur(r.fijo, l) : T(l, 'Solo matrícula', 'Tuition only'),
-        sub: T(l, `${estudioName(e, l)}, curso 2026-2027. Es la suma de las líneas de abajo: cuantías fijas más el mínimo de la parte variable${r.matricula ? '; la matrícula gratis va aparte' : ''}.`, `${estudioName(e, l)}, 2026-2027. It is the sum of the lines below: fixed amounts plus the minimum of the variable amount${r.matricula ? '; free tuition comes on top' : ''}.`),
+        // L'hypothèse « en casa / fuera » est dans le titre du résultat : 60 € et 2760 € ne se contredisent plus.
+        label: s(v, 'fuera') === 'si'
+          ? T(l, `${umbralName(k, l)}, viviendo fuera de casa: lo que cobrarías si justificas el alquiler`, `${umbralName(k, l)}, living away from home: what you would get if you prove your rent`)
+          : T(l, `${umbralName(k, l)}, viviendo en casa: dinero seguro`, `${umbralName(k, l)}, living at home: guaranteed money`),
+        value: r.fijo > 0 ? eur(r.fijo, l) : T(l, 'Solo matrícula', 'Tuition only'),
+        sub: T(l, `${estudioName(e, l)}, curso 2026-2027. Es la suma de las líneas de abajo: ayudas fijas más el mínimo del extra del final${r.matricula ? '; la matrícula gratis va aparte' : ''}.`, `${estudioName(e, l)}, 2026-2027. It is the sum of the lines below: fixed amounts plus the minimum end-of-year extra${r.matricula ? '; free tuition comes on top' : ''}.`),
         rows: lineRows(r, l),
         table: {
           caption: T(l, 'Los tres umbrales, mismos estudios', 'All three thresholds, same studies'),
@@ -292,7 +303,7 @@ function cuantiasSpec(l: Lang): ToolSpec {
           rows: [
             ...(all[0].matricula || all[2].matricula ? [[compName('matricula', l), ...all.map((b) => (b.matricula ? T(l, 'sí', 'yes') : '–'))]] : []),
             ...comps.filter((c) => all.some((b) => b.lineas.some((x) => x.c === c))).map((c) => [compName(c, l), ...all.map((b) => cell(b, c))]),
-            [T(l, 'Total seguro (fijas + mínimo variable)', 'Guaranteed total (fixed + variable minimum)'), ...all.map((b) => (b.fijo === 0 && b.matricula ? T(l, 'solo matrícula', 'tuition only') : eur(b.fijo, l)))],
+            [T(l, 'Total (fijas + mínimo del extra)', 'Total (fixed + minimum extra)'), ...all.map((b) => (b.fijo === 0 && b.matricula ? T(l, 'solo matrícula', 'tuition only') : eur(b.fijo, l)))],
           ], align: ['l', 'r', 'r', 'r'],
         },
       };
@@ -358,7 +369,8 @@ function requisitosSpec(l: Lang): ToolSpec {
       if (nv === 'grado2') {
         const c = B.cumpleGrado(rama, n(v, 'mat'), n(v, 'apr'));
         ok = c.ok; value = pct(c.hecho, l);
-        rows.push([T(l, 'Porcentaje exigido', 'Percentage required'), pct(c.exigido, l)], [T(l, 'Base de la rama', 'Field base'), pct(B.porcentajeRama(rama), l)]);
+        // Un seul « 90 % » par sens : ce que tu as fait (le chiffre en grand), ce qu'on demande (test naïf du 2026-11-08).
+        rows.push([T(l, `Lo que se pide en ${ramaName(rama, l)}`, `Required in ${ramaName(rama, l)}`), pct(c.exigido, l)]);
         sub = T(l, `Convocatoria, arts. 24 y 26: ${ramaName(rama, l)} exige el ${pct(c.exigido, l)} de lo matriculado${n(v, 'mat') > A.creditosCompleta ? ' (rebajado por matricular más de 60 créditos)' : ''}.`, `Call, arts. 24 and 26: ${ramaName(rama, l)} requires ${pct(c.exigido, l)} of credits enrolled${n(v, 'mat') > A.creditosCompleta ? ' (lowered for enrolling over 60 credits)' : ''}.`);
       } else if (nv === 'master2') {
         const hecho = n(v, 'mat') > 0 ? (n(v, 'apr') / n(v, 'mat')) * 100 : 0;
@@ -374,7 +386,8 @@ function requisitosSpec(l: Lang): ToolSpec {
           : T(l, `Nota mínima de ${num(A.notaMinima, l)} (convocatoria, arts. 24, 29 y 33).`, `Minimum grade ${num(A.notaMinima, l)} (call, arts. 24, 29 and 33).`);
       }
       rows.unshift([T(l, 'Resultado', 'Result'), ok ? T(l, 'Cumple', 'Meets it') : T(l, 'No cumple', 'Does not meet it')]);
-      return { label: T(l, 'Tu requisito académico', 'Your academic requirement'), value, sub, rows };
+      const porNota = nv !== 'grado2' && nv !== 'master2' && nv !== 'nu2';
+      return { label: porNota ? T(l, 'Tu nota para el requisito', 'Your grade for the requirement') : T(l, 'Lo que aprobaste el curso pasado', 'What you passed last year'), value, sub, rows };
     },
   };
 }
@@ -433,7 +446,7 @@ function residenciaSpec(l: Lang): ToolSpec {
   return {
     inputs: [
       { id: 'miembros', label: MIEMBROS(l), def: 4, max: 20 },
-      { id: 'renta', label: T(l, 'Renta de la familia en 2025, la que cuenta para la beca', 'Family income for 2025, as counted for the grant'), def: 30000, unit: '€', max: 1e7, help: RENTA_HELP(l), link: RENTA_LINK(l) },
+      { id: 'renta', label: RENTA_LABEL(l), def: 30000, unit: '€', max: 1e7, help: RENTA_HELP(l), link: RENTA_LINK(l) },
       { kind: 'select', id: 'estudio', label: T(l, 'Estudios', 'Studies'), def: 'grado', options: estudioOpts(l), help: ESTUDIO_HELP(l), wide: true },
       { kind: 'select', id: 'mat', label: T(l, 'Matrícula', 'Enrolment'), def: 'completa', options: matOpts(l), adv: true, wide: true },
       { kind: 'choice', id: 'mod', label: T(l, 'Modalidad', 'Mode'), def: 'presencial', options: modOpts(l), help: T(l, 'Presencial incluye semipresencial (artículo 7).', 'In person includes blended study (article 7).'), adv: true, wide: true },
@@ -442,15 +455,15 @@ function residenciaSpec(l: Lang): ToolSpec {
     run: (v) => {
       const r = B.beca({ miembros: n(v, 'miembros'), renta: n(v, 'renta'), estudio: s(v, 'estudio') as B.Estudio, matricula: (s(v, 'mat') || 'completa') as B.Matricula, presencial: s(v, 'mod') !== 'distancia', fuera: true, nota: 0, rama: 'sociales', primero: false, academicoOk: true, patrimonioPct: 0, insular: 'no', disc: (s(v, 'disc') || 'no') as B.Disc });
       const res = r.lineas.find((x) => x.c === 'residencia')?.importe ?? 0;
-      const why = res > 0 ? T(l, 'Sí. Se paga solo si acreditas alquiler, residencia o pensión, y nunca más que el gasto real.', 'Yes. Paid only if you prove rent, a hall or lodging, and never above the real cost.')
+      const why = res > 0 ? T(l, 'Si tienes que vivir fuera de casa porque tu centro está lejos: se paga solo si justificas alquiler, residencia o pensión, y nunca más que el gasto real. Si estudias en tu ciudad, normalmente no hay residencia.', 'If you have to live away because your college is far from home: paid only if you prove rent, a hall or lodging, and never above the real cost. If you study in your home town, there is usually no residence amount.')
         : r.umbral > 2 ? T(l, `Renta por encima del umbral 2 (${eur(r.u.u2, l)}).`, `Income above threshold 2 (${eur(r.u.u2, l)}).`)
           : T(l, 'Estos estudios o esta matrícula no dan derecho a la residencia.', 'These studies or this enrolment do not qualify for the residence amount.');
       return {
-        label: T(l, 'Cuantía ligada a la residencia', 'Residence amount'), value: eur(res, l), sub: why,
+        label: T(l, 'Ayuda por vivir fuera de casa (residencia)', 'Living-away amount (residence)'), value: eur(res, l), sub: why,
         rows: [
-          [T(l, 'Umbral alcanzado (el 1 es el más favorable)', 'Threshold reached (1 is the best)'), umbralName(r.umbral, l)], [T(l, 'Límite del umbral 2', 'Threshold 2 limit'), eur(r.u.u2, l)],
+          [UMBRAL_ROW(l), umbralName(r.umbral, l)], [T(l, 'Límite del umbral 2', 'Threshold 2 limit'), eur(r.u.u2, l)],
           ...r.lineas.filter((x) => x.c !== 'residencia').map((x) => [compName(x.c, l), eur(x.importe, l), x.importe] as [string, string, number]),
-          [T(l, 'Total seguro con residencia', 'Guaranteed total with residence'), eur(r.fijo, l), r.fijo],
+          [T(l, 'Total si justificas el alquiler', 'Total if you prove your rent'), eur(r.fijo, l), r.fijo],
         ],
         note: T(l, 'Sin excelencia: esta calculadora no pide la nota.', 'Excellence not included: this calculator does not ask for your grade.'),
       };
@@ -467,16 +480,17 @@ function matriculaSpec(l: Lang): ToolSpec {
       { id: 'seg', label: T(l, 'Créditos en segunda o más matrícula', 'Credits taken a second time or more'), def: 0, max: 120 },
       { id: 'precio2', label: T(l, 'Precio del crédito repetido', 'Price per repeated credit'), def: 30, unit: '€', max: 500, decimals: 2, adv: true },
       { id: 'miembros', label: MIEMBROS(l), def: 4, max: 20, adv: true },
-      { id: 'renta', label: T(l, 'Renta de la familia en 2025, la que cuenta para la beca', 'Family income for 2025, as counted for the grant'), def: 30000, unit: '€', max: 1e7, adv: true, help: RENTA_HELP(l) },
+      { id: 'renta', label: RENTA_LABEL(l), def: 30000, unit: '€', max: 1e7, adv: true, help: RENTA_HELP(l) },
     ],
     run: (v) => {
       const um = B.umbralDe(n(v, 'renta'), n(v, 'miembros')), cubre = um <= 3;
       const val = cubre ? B.valorMatricula(n(v, 'cred'), n(v, 'precio')) : 0, pagas = B.valorMatricula(n(v, 'seg'), n(v, 'precio2')) + (cubre ? 0 : B.valorMatricula(n(v, 'cred'), n(v, 'precio')));
       return {
         label: T(l, 'Lo que cubre la beca de matrícula', 'What the tuition waiver covers'), value: eur(val, l),
-        sub: cubre ? T(l, 'Hasta el umbral 3, los créditos de primera matrícula son gratis. Los créditos repetidos no.', 'Up to threshold 3, first-time credits are free. Repeated credits are not.') : T(l, 'Por encima del umbral 3 no hay beca de matrícula.', 'Above threshold 3 there is no tuition waiver.'),
+        // Le prix d'exemple est rappelé sous le chiffre (test naïf : « la beca me paga 1200 € » retenu sur un prix inventé).
+        sub: `${T(l, `${int(n(v, 'cred'), l)} créditos × ${eur(n(v, 'precio'), l)} por crédito${n(v, 'precio') === 20 ? ' (precio de ejemplo: pon el de tu universidad)' : ''}.`, `${int(n(v, 'cred'), l)} credits × ${eur(n(v, 'precio'), l)} per credit${n(v, 'precio') === 20 ? ' (example price: enter your university\'s)' : ''}.`)} ${cubre ? T(l, 'Hasta el umbral 3, los créditos de primera matrícula son gratis. Los créditos repetidos no.', 'Up to threshold 3, first-time credits are free. Repeated credits are not.') : T(l, 'Por encima del umbral 3 no hay beca de matrícula.', 'Above threshold 3 there is no tuition waiver.')}`,
         rows: [[T(l, 'Pagas tú', 'You pay'), eur(pagas, l), pagas], [T(l, `Umbral con ${int(n(v, 'miembros'), l)} personas y ${eur(n(v, 'renta'), l)} de renta`, `Threshold for ${int(n(v, 'miembros'), l)} people and ${eur(n(v, 'renta'), l)} income`), umbralName(um, l)]],
-        note: T(l, 'La familia y la renta se cambian en «Más datos de tu caso». El precio del crédito lo fija cada comunidad: este sitio no lo ha recogido y te pide el tuyo.', 'Household and income can be changed under «More about your case». Each region sets the credit price: this site has not collected them and asks for yours.'),
+        note: T(l, 'La familia y la renta se cambian en «Lo que hemos supuesto por ti». El precio del crédito lo fija cada comunidad: este sitio no lo ha recogido y te pide el tuyo.', 'Household and income can be changed under «What we assumed for you». Each region sets the credit price: this site has not collected them and asks for yours.'),
       };
     },
   };
@@ -505,9 +519,9 @@ function calendarioSpec(l: Lang): ToolSpec {
   return {
     exemple: false,
     inputs: [
-      { id: 'dia', label: T(l, 'Día de hoy', 'Today: day'), def: Number(LAST_UPDATED.slice(8, 10)), max: 31 },
-      { kind: 'select', id: 'mes', label: T(l, 'Mes', 'Month'), def: String(Number(LAST_UPDATED.slice(5, 7))), options: Array.from({ length: 12 }, (_, i) => ({ value: String(i + 1), label: new Date(Date.UTC(2026, i, 15)).toLocaleDateString(l === 'es' ? 'es-ES' : 'en-GB', { month: 'long', timeZone: 'UTC' }) })) },
-      { id: 'anio', label: T(l, 'Año', 'Year'), def: Number(LAST_UPDATED.slice(0, 4)), max: 2030 },
+      { id: 'dia', label: T(l, 'Día de hoy (ya puesto: cámbialo para ver otra fecha)', 'Today (already filled in: change it to see another date)'), def: Number(LAST_UPDATED.slice(8, 10)), max: 31, hoy: 'dia', wide: true },
+      { kind: 'select', id: 'mes', hoy: 'mes', label: T(l, 'Mes', 'Month'), def: String(Number(LAST_UPDATED.slice(5, 7))), options: Array.from({ length: 12 }, (_, i) => ({ value: String(i + 1), label: new Date(Date.UTC(2026, i, 15)).toLocaleDateString(l === 'es' ? 'es-ES' : 'en-GB', { month: 'long', timeZone: 'UTC' }) })) },
+      { id: 'anio', label: T(l, 'Año', 'Year'), def: Number(LAST_UPDATED.slice(0, 4)), max: 2030, hoy: 'anio' },
     ],
     run: (v) => {
       const hoy = F.fecha(n(v, 'dia'), Number(s(v, 'mes')), n(v, 'anio'));
@@ -518,7 +532,25 @@ function calendarioSpec(l: Lang): ToolSpec {
         : prox.quien === 'tardia' ? T(l, ' Si no es tu caso, no tienes que hacer nada.', ' If this is not your case, you have nothing to do.') : '';
       // Compte à rebours seulement pour une date où l'on agit soi-même : sinon il fait croire à une échéance ouverte.
       const rows: Array<[string, string, number?]> = prox ? [...(prox.quien === 'tu' ? [[T(l, 'Días que faltan', 'Days left'), int(F.diasEntre(hoy, prox.iso), l)] as [string, string]] : []), [T(l, '¿Tienes que hacer algo?', 'Anything to do?'), quienTxt(prox.quien, l)]] : [];
-      if (cerrado) rows.push([T(l, 'Plazo para pedir la beca 2026-2027', '2026-2027 application window'), T(l, `Cerrado el ${day(CV.plazoFin, l)}`, `Closed on ${day(CV.plazoFin, l)}`)], [T(l, 'Si aún no has pedido la beca', 'If you have not applied yet'), T(l, 'La próxima es la de 2027-2028: aún sin fecha publicada', 'The next one is 2027-2028: no date published yet')]);
+      // Plazo cerrado : en grand, la prochaine action de l'étudiant (beca 2027-2028), et la date administrative en ligne
+      // (test naïf du 2026-11-08 : « 4 de diciembre » en vedette, alors qu'elle n'y fait rien).
+      if (cerrado) {
+        const ini = day(CV.plazoInicio, l), fin = day(CV.plazoFin, l);
+        const filas: Array<[string, string, number?]> = [
+          [T(l, 'Plazo de la beca 2026-2027', '2026-2027 application window'), T(l, `Cerrado el ${fin}`, `Closed on ${fin}`)],
+          ...(prox ? [[T(l, 'Si ya la pediste: próxima fecha', 'If you already applied: next date'), `${day(prox.iso, l)} · ${quienTxt(prox.quien, l)}`] as [string, string]] : []),
+        ];
+        return {
+          label: T(l, 'Tu próximo paso', 'Your next step'), value: T(l, 'Pedir la beca 2027-2028', 'Apply for the 2027-2028 grant'),
+          sub: T(l, `Es la beca de quien estudie en el curso que empieza en septiembre de 2027. Su plazo aún no se ha publicado: el de este año fue del ${ini} al ${fin}. Si se mantiene la regla actual, contará la renta de 2026 de tu familia.`, `It is the grant for the year starting in September 2027. Its window has not been published yet: this year's ran from ${ini} to ${fin}. If the current rule is kept, your family's 2026 income will count.`),
+          rows: filas,
+          table: {
+            caption: T(l, 'Convocatoria general 2026-2027', '2026-2027 general call'),
+            headers: [T(l, 'Fecha', 'Date'), T(l, 'Qué pasa', 'What happens'), T(l, 'Quién actúa', 'Who acts')],
+            rows: HITOS.map((h) => [day(h.iso, l), (h.iso < hoy ? '✓ ' : '') + (l === 'es' ? h.es : h.en), quienTxt(h.quien, l)]), align: ['l', 'l', 'l'],
+          },
+        };
+      }
       return {
         label: T(l, 'Próxima fecha de la convocatoria 2026-2027', 'Next date of the 2026-2027 call'), value: prox ? day(prox.iso, l) : T(l, 'Convocatoria cerrada', 'Call closed'),
         sub: prox ? `${l === 'es' ? prox.es : prox.en}.${tuParte}` : T(l, 'Queda la resolución de la cuantía variable, hasta seis meses después de que el Ministerio reúna los datos. La convocatoria 2027-2028 aún no tiene fecha publicada.', 'Only the variable-amount decision remains, up to six months after the Ministry has all data. The 2027-2028 call has no published date yet.'),
@@ -543,7 +575,8 @@ function recursoSpec(l: Lang): ToolSpec {
   return {
     inputs: [
       { kind: 'select', id: 'acto', label: T(l, 'Qué has recibido', 'What you received'), def: 'propuesta', options: actoOpts(l), wide: true },
-      { id: 'dia', label: T(l, 'Día de la notificación', 'Notification day'), def: 10, max: 31 },
+      // Exemple dans le passé (test naïf : « une notification du 10 novembre, alors qu'on est le 8 »).
+      { id: 'dia', label: T(l, 'Día de la notificación', 'Notification day'), def: 3, max: 31 },
       { kind: 'select', id: 'mes', label: T(l, 'Mes', 'Month'), def: '11', options: Array.from({ length: 12 }, (_, i) => ({ value: String(i + 1), label: new Date(Date.UTC(2026, i, 15)).toLocaleDateString(l === 'es' ? 'es-ES' : 'en-GB', { month: 'long', timeZone: 'UTC' }) })) },
       { id: 'anio', label: T(l, 'Año', 'Year'), def: 2026, max: 2030 },
     ],
