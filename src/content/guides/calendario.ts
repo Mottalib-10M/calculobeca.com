@@ -16,7 +16,7 @@ export default defineGuide({
     title: 'Calendario becas MEC 2026-2027: plazos, resolución y pago',
     description: 'Calendario de la beca 2026-2027: plazo del 7 de abril al 19 de mayo de 2026 tras la prórroga, fechas de comprobación, solicitud tardía y cuantía variable.',
     h1: 'Calendario de la beca general 2026-2027',
-    intro: 'Escribe la fecha de hoy o la que quieras: la calculadora marca qué fases ya pasaron y cuál es la siguiente fecha de la convocatoria.',
+    intro: 'Escribe la fecha de hoy o la que quieras: la calculadora marca en el calendario de la beca MEC qué fases ya pasaron y cuál es la siguiente fecha de la convocatoria.',
     resume: `El calendario de la beca general 2026-2027 empezó con el Real Decreto 179/2026, publicado el ${day(P.rd.boe, 'es')}, y con la convocatoria del ${day(CV.resolucion, 'es')}, cuyo extracto salió en el BOE el ${day(CV.extractoBoe, 'es')}. El plazo de solicitud se abrió el ${day(CV.plazoInicio, 'es')} y debía cerrar el ${day(CV.plazoFinOriginal, 'es')}, pero una resolución del ${day(CV.prorroga, 'es')} lo prorrogó hasta el ${day(CV.plazoFin, 'es')} a las ${CV.horaFin}, hora peninsular. Ese plazo está cerrado. Fuera de él solo se admiten solicitudes hasta el ${day(CV.solicitudTardiaHasta, 'es')} si el sustentador principal fallece o se jubila de forma forzosa después del plazo. Las comunidades y universidades debían enviar al Ministerio los datos personales y familiares antes del ${day(CV.datosPersonalesHasta, 'es')} y los académicos antes del ${day(CV.ccaaComunicanFijas, 'es')}. Las cuantías fijas se conceden en órdenes parciales y sucesivas a medida que llegan esas propuestas; la variable, en una resolución posterior. La convocatoria del curso 2027-2028 aún no existe: este calendario se actualizará cuando se publique.`,
     faqs: [
       { open: true, q: '¿Cuándo se abre el plazo de la beca para el curso 2027-2028?', a: 'Todavía no hay fecha: depende de un real decreto de umbrales y de una convocatoria que no se han publicado. En el curso 2026-2027, el real decreto salió en marzo y el plazo se abrió el 7 de abril. No anunciamos fechas que no estén en el BOE; cuando se publique la nueva convocatoria, este calendario cambiará.' },
@@ -26,7 +26,7 @@ export default defineGuide({
     ],
     body: (h) => `<h2>Antes del próximo plazo</h2>
 <p>Si la próxima convocatoria mantiene la regla actual, que mira el año anterior al de la solicitud, contará la renta de 2026 y los miembros que convivan a 31 de diciembre de 2026. Si preparas la solicitud con tiempo, revisa ya la ${h.a('renta', 'renta familiar')} con la declaración de 2026 cuando la tengas y comprueba el ${h.a('patrimonio', 'patrimonio')}. Los umbrales y cuantías de 2027-2028 no se conocen hasta su real decreto: hasta entonces, el ${h.src('rd179', 'Real Decreto 179/2026')} es el último publicado.</p>
-<h2>Las fechas de la convocatoria</h2>
+<h2>El calendario de la convocatoria de becas</h2>
 <p>La tabla de la calculadora, arriba, da cada fecha y quién tiene que actuar ese día. Las fechas salen del ${h.src('extracto', 'extracto de la convocatoria')}, de la ${h.src('prorroga', 'resolución de prórroga')} y del texto completo de la ${h.src('convocatoria', 'convocatoria')}. No incluyen festivos autonómicos ni fechas internas de cada universidad.</p>
 <h2>Cómo avanza una solicitud</h2>
 <ol>
@@ -46,8 +46,8 @@ ${h.mini('recurso', { p: ['acto', 'dia', 'mes'], t: '¿Te ha llegado una notific
     nav: 'Calendar 2026-2027', card: 'From the royal decree to payment: application window, selection deadlines and the decision',
     title: 'Beca MEC calendar 2026-2027: window, decision and payment',
     description: 'Calendar of Spain\'s 2026-2027 grant: window from 7 April to 19 May 2026 after the extension, checking deadlines, late applications and the variable amount.',
-    h1: 'Calendar of Spain\'s general study grant 2026-2027',
-    intro: 'Enter today\'s date or any other: the calculator marks which stages have passed and what the next date in the call is.',
+    h1: 'Beca MEC calendar: Spain\'s general study grant 2026-2027',
+    intro: 'Enter today\'s date or any other: the calculator marks on the beca MEC calendar which stages have passed and what the next date in the call is.',
     resume: `The 2026-2027 general grant calendar began with Royal Decree 179/2026, published on ${day(P.rd.boe, 'en')}, and the call of ${day(CV.resolucion, 'en')}, whose summary appeared in the Official Gazette on ${day(CV.extractoBoe, 'en')}. The application window opened on ${day(CV.plazoInicio, 'en')} and was due to close on ${day(CV.plazoFinOriginal, 'en')}, but a resolution of ${day(CV.prorroga, 'en')} extended it to ${day(CV.plazoFin, 'en')} at ${CV.horaFin} mainland time. That window is closed. Outside it, applications are accepted until ${day(CV.solicitudTardiaHasta, 'en')} only if the main earner dies or is forced to retire after the deadline. Regions and universities had to send the Ministry personal and family data by ${day(CV.datosPersonalesHasta, 'en')} and academic data by ${day(CV.ccaaComunicanFijas, 'en')}. Fixed amounts are awarded in partial, successive orders as those proposals arrive; the variable amount in a later decision. The 2027-2028 call does not exist yet: this calendar will be updated when it is published.`,
     faqs: [
       { open: true, q: 'When does the 2027-2028 application window open?', a: 'There is no date yet: it depends on a thresholds decree and a call that have not been published. For 2026-2027, the decree came out in March and the window opened on 7 April. This site does not announce dates that are not in the Official Gazette; when the new call is published, this calendar will change.' },
@@ -57,7 +57,7 @@ ${h.mini('recurso', { p: ['acto', 'dia', 'mes'], t: '¿Te ha llegado una notific
     ],
     body: (h) => `<h2>Before the next window</h2>
 <p>If the next call keeps the current rule, which looks at the year before the application, 2026 income will count, with the members living together on 31 December 2026. If you are preparing early, review ${h.a('renta', 'family income')} with the 2026 return once you have it and check ${h.a('patrimonio', 'wealth')}. The 2027-2028 thresholds and amounts are unknown until their decree: until then, ${h.src('rd179', 'Royal Decree 179/2026')} is the latest published.</p>
-<h2>The dates of the call</h2>
+<h2>The beca MEC calendar, date by date</h2>
 <p>The calculator's table, above, gives each date and who has to act that day. The dates come from the ${h.src('extracto', 'summary of the call')}, the ${h.src('prorroga', 'extension resolution')} and the full text of the ${h.src('convocatoria', 'call')}. They leave out regional holidays and each university's internal dates.</p>
 <h2>How an application moves forward</h2>
 <ol>

@@ -17,9 +17,9 @@ const eur = (x: number) => formatMoney(x, 0, lang);
 ---
 <PageLayout title={title} description={description} lang={lang} jsonLd={[webPageSchema({ name: 'Method', description, path, lang }), breadcrumbSchema([{ name: 'Home', path: route('home', lang) }, { name: 'Method', path }])]} breadcrumbs={[{ label: 'Method' }]}>
   <article class="prose prose-slate max-w-none">
-    <h1>How the simulator calculates</h1>
-    <p class="text-xs font-medium uppercase tracking-wide text-navy-500">Independent site: not the Ministry of Education, handles no applications</p>
-    <p>Every sum runs in your browser with rules written from three texts, re-read on {d(P.retrieved_at)}: <Fragment set:html={s('rd179', 'Royal Decree 179/2026')} />, published on {d(P.rd.boe)}; the <Fragment set:html={s('rd1721', 'consolidated Royal Decree 1721/2007')} />; and the full text of the <Fragment set:html={s('convocatoria', 'call of ' + d(CV.resolucion))} />, downloaded from the National Grants Database. What you type never leaves your device.</p>
+    <h1>The method behind Cálculo Beca: how the simulator calculates</h1>
+    <div class="not-prose text-xs font-medium uppercase tracking-wide text-navy-500">Independent site: not the Ministry of Education, handles no applications</div>
+    <p>Under Cálculo Beca's method, every sum runs in your browser with rules written from three texts, re-read on {d(P.retrieved_at)}: <Fragment set:html={s('rd179', 'Royal Decree 179/2026')} />, published on {d(P.rd.boe)}; the <Fragment set:html={s('rd1721', 'consolidated Royal Decree 1721/2007')} />; and the full text of the <Fragment set:html={s('convocatoria', 'call of ' + d(CV.resolucion))} />, downloaded from the National Grants Database. What you type never leaves your device.</p>
     <h2>The order of the rules</h2>
     <p>The simulator follows the Ministry's order. First, family income against the thresholds in article 8 of the Royal Decree, by household size, using the lower end of each range, which is what the call applies in its article 19; being exactly on a threshold counts as not exceeding it. Second, wealth: the sum of percentages in article 20 of the call and the {eur(P.patrimonio.actividades)} business limit. Third, the academic requirement in articles 24, 26, 29, 33 and 34. If all three are met, the components matching your studies, threshold, enrolment and mode are added up, under articles 3 and 4 of the Royal Decree and 5 to 13 of the call.</p>
     <h2>What is exact and what is not</h2>
@@ -28,7 +28,7 @@ const eur = (x: number) => formatMoney(x, 0, lang);
     <p>The main simulator sums up the academic requirement as a grade and a pass rate; the requirements calculator applies the full exceptional-performance formula. Full-orphan status is applied to income after other deductions. Working-day deadlines skip Saturdays and Sundays but not holidays, which vary by region and town. The Basque and Catalan calls are not calculated, nor is aid for students with specific educational support needs.</p>
     <h2>Tests</h2>
     <p>The rules have automated tests with cases taken from the text: threshold 1 for five members ({eur(K.umbrales(5).u1)}), income exactly on the threshold, a flat revalued in 2010 with its coefficient, the 7.5 in engineering that reaches excellence after the coefficient, part-time enrolment of 48 credits, a one-month deadline ending on a Saturday. The site does not build if a test fails.</p>
-    <h2>Updates</h2>
+    <h2>How Cálculo Beca's method is updated</h2>
     <p>Each year brings a new royal decree and a new call. We re-read both by hand when they appear in the Official Gazette; there is no automatic update. Until then, the figures are those for 2026-2027 and say so. If you spot an error, write via <a href={route('contact', lang)}>contact</a>; how we correct is in the <a href={route('editorial', lang)}>editorial policy</a>.</p>
     <h2>Reuse of BOE data</h2>
     <p>Based on data from the Agencia Estatal Boletín Oficial del Estado, <a href="https://www.boe.es" rel="nofollow noopener" target="_blank">www.boe.es</a>, under its <Fragment set:html={s('boeReutilizacion', 'reuse conditions')} />. The tables have been adapted: reordered, combined and turned into calculators. This site is not an official publication.</p>

@@ -13,12 +13,12 @@ const s = (k: string, t: string) => srcLink(k, lang, t);
 ---
 <PageLayout title={title} description={description} lang={lang} jsonLd={[profilePageSchema({ path, lang }), breadcrumbSchema([{ name: 'Home', path: route('home', lang) }, { name: 'About', path }])]} breadcrumbs={[{ label: 'About' }]}>
   <article class="prose prose-slate max-w-none">
-    <h1>About</h1>
-    <p class="text-xs font-medium uppercase tracking-wide text-navy-500">Independent site: not the Ministry of Education, handles no applications</p>
+    <h1>About Cálculo Beca and its publisher</h1>
+    <div class="not-prose text-xs font-medium uppercase tracking-wide text-navy-500">Independent site: not the Ministry of Education, handles no applications</div>
     <p>{AUTHOR_DESC.en}</p>
     <h2>Why it exists</h2>
     <p>Finding out whether you qualify means crossing a threshold table by household size, a list of deductions, wealth limits with cadastral coefficients and an academic requirement that differs by field. The pages going round copy the table, sometimes with typos or as an image, and do not do the sum. The Ministry's official simulator only covers the variable part. Here the full sum of fixed amounts takes a minute, with the article next to every figure, and what cannot be forecast is stated plainly.</p>
-    <h2>Who publishes it</h2>
+    <h2>The publisher behind Cálculo Beca</h2>
     <p>{AUTHOR_NAME}, a company that builds calculators from public rules. It is not a public body, a tutoring school or an agency. It uses no logos or marks of any administration, charges nothing, has no affiliate links and collects no student phone numbers or emails.</p>
     <LegalIdentity lang={lang} />
     <h2>Sources</h2>

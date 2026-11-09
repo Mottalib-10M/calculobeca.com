@@ -14,11 +14,11 @@ const s = (k: string, t: string) => srcLink(k, lang, t);
 <PageLayout title={title} description={description} lang={lang} jsonLd={[profilePageSchema({ path, lang }), breadcrumbSchema([{ name: 'Inicio', path: route('home', lang) }, { name: 'Quiénes somos', path }])]} breadcrumbs={[{ label: 'Quiénes somos' }]}>
   <article class="prose prose-slate max-w-none">
     <h1>Quiénes somos</h1>
-    <p class="text-xs font-medium uppercase tracking-wide text-navy-500">Sitio independiente: no es el Ministerio de Educación ni gestiona la solicitud</p>
+    <div class="not-prose text-xs font-medium uppercase tracking-wide text-navy-500">Sitio independiente: no es el Ministerio de Educación ni gestiona la solicitud</div>
     <p>{AUTHOR_DESC.es}</p>
     <h2>Por qué existe</h2>
     <p>Saber si te toca la beca exige cruzar una tabla de umbrales por miembros, una lista de deducciones, unos límites de patrimonio con coeficientes catastrales y un requisito académico distinto por rama. Las páginas que circulan copian la tabla, a veces con erratas o en una imagen, y no hacen la cuenta. El simulador oficial del Ministerio calcula solo la parte variable. Aquí la cuenta completa de las cuantías fijas se hace en un minuto, con el artículo al lado de cada cifra, y se dice con claridad lo que no se puede prever.</p>
-    <h2>Quién lo publica</h2>
+    <h2>Quiénes somos: una empresa, no una administración</h2>
     <p>{AUTHOR_NAME}, una empresa que construye calculadoras a partir de normas públicas. No es una administración, ni una academia, ni una gestoría. No usa logotipos ni signos de ninguna administración, no cobra, no tiene enlaces de afiliación y no recoge teléfonos ni correos de estudiantes.</p>
     <LegalIdentity lang={lang} />
     <h2>Las fuentes</h2>

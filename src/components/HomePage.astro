@@ -33,7 +33,7 @@ const fecha = (iso: string) => displayDate(iso, lang === 'es' ? 'es-ES' : 'en-GB
 <PageLayout title={x.title} description={x.description} lang={lang} jsonLd={jsonLd} faqs={x.faqs} sources={sources}>
   <header class="mb-4">
     <h1 class="text-[1.7rem] font-bold text-navy-900 max-sm:leading-tight sm:text-3xl md:text-4xl">{x.h1}</h1>
-    <p class="mt-1 text-xs font-medium uppercase tracking-wide text-navy-500">{ui.independent}</p>
+    <div class="mt-1 text-xs font-medium uppercase tracking-wide text-navy-500">{ui.independent}</div>
     <p class="mt-2 text-base text-navy-700 sm:text-lg">{x.intro}</p>
   </header>
   <AvisoPlazo lang={lang} />

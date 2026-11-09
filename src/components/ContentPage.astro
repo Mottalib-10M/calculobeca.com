@@ -33,7 +33,7 @@ const read = { es: `Cifras releídas en el BOE y en la convocatoria el ${gel}`, 
   <article>
     <header class="mb-4">
       <h1 class="text-[1.7rem] font-bold text-navy-900 max-sm:leading-tight sm:text-3xl md:text-4xl">{x.h1}</h1>
-      <p class="mt-1 text-xs font-medium uppercase tracking-wide text-navy-500">{ui.independent}</p>
+      <div class="mt-1 text-xs font-medium uppercase tracking-wide text-navy-500">{ui.independent}</div>
       <p class="mt-2 text-base text-navy-700 sm:text-lg">{x.intro}</p>
       {/* Parcours débutant (testeurs du 2026-11-08 : arrivés de Google sur une page de détail, ils ne savaient pas par où commencer). */}
       {!(page.tool === 'beca' && !page.toolArg) && <p data-chrome class="mt-1 text-sm"><a href={`${route('home', lang)}#simulador`} class="font-medium text-accent-700 underline">{lang === 'es' ? '¿No sabes por dónde empezar? El simulador completo, en una sola pantalla →' : 'Not sure where to start? The full simulator, on one screen →'}</a></p>}

@@ -60,9 +60,9 @@ const es: HomeLang = {
 const en: HomeLang = {
   title: 'Beca MEC 2026-2027: Spain study grant simulator and amounts',
   description: 'Simulator for Spain\'s 2026-2027 study grant (beca MEC): income threshold, fixed amounts of €1,700 and €2,700, wealth limits and academic rules from the BOE.',
-  h1: 'Spain\'s general study grant 2026-2027: am I eligible, and for how much?',
+  h1: 'Spain\'s general study grant (beca MEC) 2026-2027: am I eligible, and for how much?',
   homeCard: 'Whether you would get a grant, how much is guaranteed and your household threshold, on one screen',
-  intro: 'Enter how many live at home, the family income and what you will study (parents: answer for your child): the simulator tells you whether you would get a grant and how much money is guaranteed, under the rules published in the BOE.',
+  intro: 'Enter how many live at home, the family income and what you will study (parents: answer for your child): the simulator tells you whether you would get the beca MEC and how much money is guaranteed, under the rules published in the BOE.',
   resume: `Spain's general state study grant for 2026-2027, widely known as the beca MEC, is awarded on three family income thresholds and a wealth limit set by Royal Decree 179/2026, plus an academic requirement in the call of ${day(CV.resolucion, 'en')}. For a household of four, the thresholds are ${eur(u4.u1, 'en')}, ${eur(u4.u2, 'en')} and ${eur(u4.u3, 'en')} of 2025 income. Up to threshold 1 you get the fixed income-linked amount of ${eur(C.renta, 'en')}; up to threshold 2, the residence amount of ${eur(C.residencia, 'en')} if you study far from home, and the variable amount; up to threshold 3, the tuition waiver at university, the basic grant of ${eur(C.basica, 'en')} below it, and excellence, from ${eur(C.excelencia[0].importe, 'en')} to ${eur(C.excelencia[C.excelencia.length - 1].importe, 'en')}. Every fixed amount can be worked out to the euro. The variable amount cannot: it is shared out at the end with a formula whose inputs only the Ministry holds, so the simulator only shows its guaranteed minimum of ${eur(C.variableMin, 'en')}. This year's application window closed on ${day(CV.plazoFin, 'en')}.`,
   stepsTitle: 'The three questions the Ministry decides, in order',
   steps: [
@@ -73,7 +73,7 @@ const en: HomeLang = {
   datesTitle: 'Dates of the 2026-2027 call',
   datesNote: 'Dates from the Official Gazette and the text of the call. Under each one, who has to act.',
   guidesTitle: 'Each component, with its calculator',
-  foldTitle: 'Understanding the grant in depth',
+  foldTitle: 'Understanding the beca MEC in depth',
   faqs: [
     { q: 'Is this site the Ministry of Education, or does it process the grant?', a: 'No. Cálculo Beca is an independent site: it is not the Ministry of Education and does not handle applications. It is published by Radif Partners, which awards no grants and sees no files. Applications are made only on the Ministry\'s e-office, and the Ministry awards the grant using tax and college data. Here we only calculate, with the rules in the Official Gazette.' },
     { q: 'Is anything I type into the simulator sent anywhere?', a: 'No. The rules of the Royal Decree and the call are inside the page itself and the calculation runs in your browser. There is no account, no contact form and no database. If you use the share link, the figures sit in the address and only whoever opens it sees them. What you type is remembered only in this tab, so you can move between calculators without retyping it, and is erased when you close it.' },

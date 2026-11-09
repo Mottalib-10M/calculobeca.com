@@ -17,7 +17,7 @@ export default defineGuide({
     title: 'Umbrales becas MEC 2026-2027: tabla por miembros y cálculo',
     description: 'Umbrales de renta de la beca general 2026-2027 según el Real Decreto 179/2026: tabla de 1 a 8 miembros y más, y calculadora para saber en qué umbral caes.',
     h1: 'Umbrales de renta de la beca general 2026-2027',
-    intro: 'Indica cuántos miembros computables tiene tu familia y su renta de 2025: la calculadora te dice qué umbral alcanzas y cuánto margen te queda hasta el siguiente.',
+    intro: 'Indica cuántos miembros computables tiene tu familia y su renta de 2025: la calculadora compara esa renta con los umbrales de la beca, te dice cuál alcanzas y cuánto margen te queda hasta el siguiente.',
     resume: `La beca general del Estado para el curso 2026-2027 usa tres umbrales de renta familiar, fijados por el artículo 8 del Real Decreto 179/2026, de 11 de marzo, publicado en el BOE el ${day(P.rd.boe, 'es')}. Para una familia de cuatro miembros son ${eur(u4.u1, 'es')}, ${eur(u4.u2, 'es')} y ${eur(u4.u3, 'es')} de renta familiar del año 2025. Quien no pasa del umbral 1 puede cobrar la cuantía fija ligada a la renta, de ${eur(P.cuantias.renta, 'es')}, junto a las demás piezas; hasta el umbral 2 se mantienen la cuantía de residencia y la cuantía variable; hasta el umbral 3 solo quedan la beca de matrícula, la beca básica y la cuantía por excelencia. Por encima del umbral 3 no hay ningún componente. La renta que se compara no es tu sueldo ni la casilla final de la declaración: es la renta familiar a efectos de beca, con sus deducciones. Igualar el umbral cuenta como no superarlo. La tabla completa está debajo y la calculadora lo comprueba para tu caso.`,
     faqs: [
       { q: '¿Qué año de renta cuenta para la beca del curso 2026-2027?', a: 'Cuenta el ejercicio 2025, es decir, la declaración de la renta que se presentó entre abril y junio de 2026. Lo dicen el artículo 9 del Real Decreto 179/2026 y el artículo 16 de la convocatoria. Si tus ingresos bajaron en 2026 por un despido, no se tienen en cuenta en esta convocatoria, salvo los casos de fallecimiento o jubilación forzosa del sustentador principal.' },
@@ -25,7 +25,7 @@ export default defineGuide({
       { q: '¿Quién cuenta como miembro computable de la familia?', a: 'Los padres o tutores, tú, tus hermanos solteros menores de 25 años que vivan en casa, los mayores de 25 con discapacidad y los abuelos empadronados en el mismo domicilio, todo ello a 31 de diciembre de 2025. Si tus padres están separados, no cuenta el que no vive contigo, pero sí su nueva pareja si convive en casa. Lo regula el artículo 17 de la convocatoria.' },
       { q: '¿Por qué los umbrales de 2026-2027 son más altos que los del curso anterior?', a: 'Porque cada año el Gobierno los fija en un real decreto nuevo y los ajusta. Esta página solo usa los del Real Decreto 179/2026, para el curso 2026-2027. No comparamos con años anteriores ni anunciamos los del curso 2027-2028: aún no existen. Saldrán en otro real decreto, normalmente en marzo, y entonces se actualizará la tabla.' },
     ],
-    body: (h) => `<h2>La tabla de umbrales 2026-2027</h2>
+    body: (h) => `<h2>La tabla de umbrales de la beca 2026-2027</h2>
 <p>Estos son los límites que aplica la convocatoria del Ministerio de Educación, Formación Profesional y Deportes en su artículo 19, tomados del ${h.src('rd179', 'artículo 8 del Real Decreto 179/2026')}. Todas las cifras son euros de renta familiar del año 2025.</p>
 ${h.table(['Miembros', 'Umbral 1', 'Umbral 2', 'Umbral 3'], tabla('es'), 'Umbrales de renta familiar, curso 2026-2027', ['l', 'r', 'r', 'r'])}
 <h2>Qué abre cada umbral</h2>
@@ -43,8 +43,8 @@ ${h.mini('umbrales', { p: ['miembros', 'renta'], d: { miembros: 5, renta: u5.u2 
     nav: 'Income thresholds 2026-2027', card: 'The three family income limits by household size, and which one you fall under',
     title: 'Beca MEC income thresholds 2026-2027: table by household',
     description: 'Income thresholds for Spain\'s 2026-2027 general study grant under Royal Decree 179/2026: table for 1 to 8+ members and a calculator to find your threshold.',
-    h1: 'Income thresholds for Spain\'s general study grant 2026-2027',
-    intro: 'Enter how many members your household counts and its 2025 income: the calculator shows which threshold you reach and how much room is left before the next one.',
+    h1: 'Beca MEC income thresholds 2026-2027',
+    intro: 'Enter how many members your household counts and its 2025 income: the calculator shows which beca MEC income threshold you reach and how much room is left before the next one.',
     resume: `Spain's general state study grant for 2026-2027 works with three family income thresholds, set by article 8 of Royal Decree 179/2026 of 11 March, published in the Official Gazette (BOE) on 12 March 2026. For a four-member household they are ${eur(u4.u1, 'en')}, ${eur(u4.u2, 'en')} and ${eur(u4.u3, 'en')} of family income for the year 2025. Staying within threshold 1 opens the fixed income-linked amount of ${eur(P.cuantias.renta, 'en')} on top of everything else; up to threshold 2 you keep the residence amount and the variable amount; up to threshold 3 only the tuition waiver, the basic grant and the excellence amount remain. Above threshold 3 there is no component at all. The figure compared is not a salary or the bottom line of the tax return: it is family income for grant purposes, after its own deductions. Being exactly on a threshold counts as not exceeding it. The full table is below and the calculator checks your case.`,
     faqs: [
       { q: 'Which tax year counts for the 2026-2027 grant?', a: 'The 2025 tax year, meaning the income tax return filed between April and June 2026. Article 9 of Royal Decree 179/2026 and article 16 of the call say so. If your income fell in 2026 after a dismissal, this call does not take it into account, except where the main earner died or was forced to retire.' },
@@ -52,7 +52,7 @@ ${h.mini('umbrales', { p: ['miembros', 'renta'], d: { miembros: 5, renta: u5.u2 
       { q: 'Who counts as a household member for the grant?', a: 'Your parents or guardians, you, unmarried siblings under 25 living at home, older siblings with a disability and grandparents registered at the same address, all as at 31 December 2025. If your parents are separated, the one not living with you does not count, but a new partner living in the home does. Article 17 of the call sets this out.' },
       { q: 'Why are the 2026-2027 thresholds higher than last year?', a: 'Because the Government sets them in a new royal decree every year and adjusts them. This page only uses Royal Decree 179/2026, for 2026-2027. It neither compares with past years nor announces the 2027-2028 figures, which do not exist yet. They will come in another decree, usually in March, and the table will be updated then.' },
     ],
-    body: (h) => `<h2>The 2026-2027 threshold table</h2>
+    body: (h) => `<h2>The 2026-2027 beca MEC income threshold table</h2>
 <p>These are the limits applied by the Ministry of Education's call in its article 19, taken from ${h.src('rd179', 'article 8 of Royal Decree 179/2026')}. All figures are euros of family income for 2025.</p>
 ${h.table(['Members', 'Threshold 1', 'Threshold 2', 'Threshold 3'], tabla('en'), 'Family income thresholds, 2026-2027', ['l', 'r', 'r', 'r'])}
 <h2>What each threshold gives access to</h2>
