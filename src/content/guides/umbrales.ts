@@ -43,7 +43,7 @@ ${h.mini('umbrales', { p: ['miembros', 'renta'], d: { miembros: 5, renta: u5.u2 
     nav: 'Income thresholds 2026-2027', card: 'The three family income limits by household size, and which one you fall under',
     title: 'Beca MEC income thresholds 2026-2027: table by household',
     description: 'Income thresholds for Spain\'s 2026-2027 general study grant under Royal Decree 179/2026: table for 1 to 8+ members and a calculator to find your threshold.',
-    h1: 'Beca MEC income thresholds 2026-2027',
+    h1: 'Beca MEC (Ministry of Education) income thresholds',
     intro: 'Enter how many members your household counts and its 2025 income: the calculator shows which beca MEC income threshold you reach and how much room is left before the next one.',
     resume: `Spain's general state study grant for 2026-2027 works with three family income thresholds, set by article 8 of Royal Decree 179/2026 of 11 March, published in the Official Gazette (BOE) on 12 March 2026. For a four-member household they are ${eur(u4.u1, 'en')}, ${eur(u4.u2, 'en')} and ${eur(u4.u3, 'en')} of family income for the year 2025. Staying within threshold 1 opens the fixed income-linked amount of ${eur(P.cuantias.renta, 'en')} on top of everything else; up to threshold 2 you keep the residence amount and the variable amount; up to threshold 3 only the tuition waiver, the basic grant and the excellence amount remain. Above threshold 3 there is no component at all. The figure compared is not a salary or the bottom line of the tax return: it is family income for grant purposes, after its own deductions. Being exactly on a threshold counts as not exceeding it. The full table is below and the calculator checks your case.`,
     faqs: [
