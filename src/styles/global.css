@@ -101,11 +101,12 @@ h1 { font-weight: 700; } h2 { font-weight: 650; } h3 { font-weight: 600; }
   .clamp-toggle:focus-visible ~ .clamp-more { outline: 2px solid var(--color-accent-700); outline-offset: 3px; }
   /* Textes longs en accordéons : le texte reste dans le HTML. */
   .fold { border-top: 1px solid var(--color-navy-200); }
-  .fold > summary { cursor: pointer; list-style: none; padding: 0.9rem 0; font-size: 1.15rem; font-weight: 650; color: var(--color-navy-900); }
+  .fold > summary { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; cursor: pointer; list-style: none; padding: 0.9rem 0; font-size: 1.15rem; font-weight: 650; color: var(--color-navy-900); }
   .fold > summary::-webkit-details-marker { display: none; }
-  .fold > summary::after { content: '+'; float: right; color: var(--color-navy-600); }
+  /* Le « + » reste sur la ligne du titre, même long (testeurs du 2026-11-09 : « + » tombé sous le trait). */
+  .fold > summary::after { content: '+'; flex: none; color: var(--color-navy-600); }
   .fold[open] > summary::after { content: '\2212'; }
-  .fold > summary > .fold-h { display: inline; font: inherit; margin: 0; color: inherit; }
+  .fold > summary > .fold-h { display: block; min-width: 0; font: inherit; margin: 0; color: inherit; }
   /* Encadré : filet à gauche, fond très léger. */
   .boxnote { border-left: 3px solid var(--color-accent-500); background: var(--color-accent-50); padding: 0.9rem 1.1rem; margin: 1.5rem 0; }
   .boxnote > .boxnote-title { font-weight: 700; color: var(--color-accent-700); margin: 0 0 .25rem; }

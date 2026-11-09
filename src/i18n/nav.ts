@@ -3,8 +3,8 @@ import { GUIDES, guideById } from '../lib/pages';
 import type { Group } from '../lib/page-types';
 export interface NavLink { href: string; label: string } export interface NavCategory { label: string; links: NavLink[] }
 const CORE: Record<Locale, Record<string, string>> = {
-  es: { home: 'Simulador de beca', method: 'Método', about: 'Quiénes somos', widget: 'Insertar el simulador', contact: 'Contacto', editorial: 'Política editorial', privacy: 'Privacidad', terms: 'Aviso legal', cookies: 'Cookies' },
-  en: { home: 'Grant simulator', method: 'Method', about: 'About', widget: 'Embed the simulator', contact: 'Contact', editorial: 'Editorial policy', privacy: 'Privacy', terms: 'Legal notice', cookies: 'Cookies' },
+  es: { home: 'Simulador de beca', method: 'Cómo calculamos', about: 'Quiénes somos', widget: 'Insertar el simulador', contact: 'Contacto', editorial: 'Política editorial', privacy: 'Privacidad', terms: 'Aviso legal', cookies: 'Cookies' },
+  en: { home: 'Grant simulator', method: 'How we calculate', about: 'About', widget: 'Embed the simulator', contact: 'Contact', editorial: 'Editorial policy', privacy: 'Privacy', terms: 'Legal notice', cookies: 'Cookies' },
 };
 export const GROUPS: Array<{ id: Group; label: Record<Locale, string> }> = [
   { id: 'dinero', label: { es: 'Renta y cuantías', en: 'Income and amounts' } },

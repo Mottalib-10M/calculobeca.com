@@ -41,7 +41,7 @@ export default function MiniSim({ kind, lang, href, arg }: Props) {
           <p className="text-sm font-medium text-navy-600">{out.label}</p>
           <p className="tabular-nums mt-1 text-3xl font-bold text-navy-900">{out.value}</p>
           <table className="mt-3 w-full table-fixed text-sm"><tbody className="divide-y divide-navy-200">
-            {out.rows.map(([l, x]) => <tr key={l}><td className="py-1.5 pe-3 text-navy-600 hyphens-auto [overflow-wrap:anywhere]">{l}</td><td className="w-[42%] tabular-nums py-1.5 text-right text-navy-900 [overflow-wrap:anywhere]">{x}</td></tr>)}
+            {out.rows.map(([l, x]) => <tr key={l}><td className="py-1.5 pe-3 text-navy-600 [overflow-wrap:break-word]">{l}</td><td className="w-[42%] tabular-nums py-1.5 text-right text-navy-900 [overflow-wrap:anywhere]">{x}</td></tr>)}
           </tbody></table>
         </div>
       </div>

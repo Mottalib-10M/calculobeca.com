@@ -18,7 +18,7 @@ export function Rows({ rows }: { rows: Array<[string, string, number?]> }) {
   return (
     <table className="mt-3 w-full table-fixed text-sm"><tbody className="divide-y divide-navy-200">
       {rows.map(([l, v]) => (
-        <tr key={l}><td className="py-1.5 pe-3 text-navy-700 hyphens-auto [overflow-wrap:anywhere]">{l}</td><td className="w-[42%] tabular-nums py-1.5 text-right align-top text-navy-900 [overflow-wrap:anywhere]">{v}</td></tr>
+        <tr key={l}><td className="py-1.5 pe-3 text-navy-700 [overflow-wrap:break-word]">{l}</td><td className="w-[42%] tabular-nums py-1.5 text-right align-top text-navy-900 [overflow-wrap:anywhere]">{v}</td></tr>
       ))}
     </tbody></table>
   );

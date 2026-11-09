@@ -55,9 +55,9 @@ const fecha = (iso: string) => displayDate(iso, lang === 'es' ? 'es-ES' : 'en-GB
   {/* La table des umbrales est déjà dans le résultat du simulateur pour la famille saisie : celle de 1 à 6 personnes se replie
        (test naïf du 2026-11-08 : « la deuxième fois que je vois ces chiffres »). */}
   <details class="fold mt-10" data-chrome>
-    <summary><h2 class="fold-h">{L('Umbrales para otras familias, de 1 a 6 personas', 'Thresholds for other households, 1 to 6 people')}</h2></summary>
+    <summary><h2 class="fold-h">{L('Umbrales para otras familias, de 1 a 8 personas', 'Thresholds for other households, 1 to 8 people')}</h2></summary>
     <Fragment set:html={tabla} />
-    <p class="pb-4 text-sm text-navy-600"><a href={route('umbrales', lang)} class="font-medium text-accent-700 underline">{L('Tabla completa, de 1 a 8 miembros y más', 'Full table, 1 to 8 members and more')}</a></p>
+    <p class="pb-4 text-sm text-navy-600"><a href={route('umbrales', lang)} class="font-medium text-accent-700 underline">{L('Familias de más de 8 personas y deducciones', 'Households of more than 8 and deductions')}</a></p>
   </details>
   <section class="mt-10" data-chrome>
     <h2 class="text-2xl font-bold text-navy-900">{x.datesTitle}</h2>

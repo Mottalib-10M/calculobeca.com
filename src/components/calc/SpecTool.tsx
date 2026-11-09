@@ -8,13 +8,13 @@ import NumberField from '../ui/NumberField';
 import SelectField from '../ui/SelectField';
 import { Choice, Exemple, ResultCard, Rows, ShareRow } from './parts';
 import { readParams, updateURL } from '../../lib/url-state';
-import { getTool } from '../../lib/tool-specs';
+import { getTool, resumenCampo } from '../../lib/tool-specs';
 import { optsOf, resolve, type Input, type V } from '../../lib/tool-types';
 import { t } from '../../i18n/ui';
 import { formatNumber, type Lang } from '../../lib/format';
 import { attributsTableau } from '../../lib/tableaux';
 import { titreFiche } from '../../lib/fiches';
-import { libellesTrame, resumeRepli } from '../../lib/libelles-trame';
+import { libellesTrame } from '../../lib/libelles-trame';
 import { leerDatos, guardarDatos, borrarDatos } from '../../lib/datos-compartidos';
 
 interface Props { kind: string; lang: Lang; arg?: string; methodHref?: string; idPrefix?: string }
@@ -69,6 +69,9 @@ export default function SpecTool({ kind, lang, arg, methodHref, idPrefix = 't' }
     if (i.kind === 'choice' || i.kind === 'select') return (i.kind === 'select' ? optsOf(i, rv) : i.options).find((o) => o.value === String(rv[i.id]))?.label ?? '';
     return `${formatNumber(Number(rv[i.id]), i.decimals ?? 0, lang)}${i.unit ? (i.unit === '%' && lang === 'en' ? '%' : ` ${i.unit}`) : ''}`;
   };
+  // Résumé du repli : « libellé: valeur » en mots simples, sans le « Ahora: » de la trame (testeurs du 2026-11-09 :
+  // « Ahora: » ne disait rien, libellés et valeurs se collaient). Le défaut vient de lib/libelles-trame.ts (resumeRepli).
+  const resumen = adv.map((i) => resumenCampo(i.id, rv, lang) ?? `${i.label}: ${valor(i)}`).join(' · ');
   // Tant que rien n'a été changé, le résultat est un exemple, et on le dit (test naïf du 2026-11-08 : « 60 €, c'est ma beca ? »).
   const exemple = spec.exemple !== false && spec.inputs.every((i) => String(rv[i.id]) === String(defaults[i.id]));
   return (
@@ -79,7 +82,7 @@ export default function SpecTool({ kind, lang, arg, methodHref, idPrefix = 't' }
           {main.map(field)}
           {adv.length > 0 && (
             <details data-repli className="sm:col-span-2 rounded-lg border border-navy-200 px-3 py-2">
-              <summary className="cursor-pointer text-sm font-medium text-navy-700">{lib.plusDeReglages}<span data-actuellement className="mt-0.5 block text-xs font-normal text-navy-600">{resumeRepli(lang, adv.map((i) => ({ label: i.label, valeur: valor(i) })))}</span></summary>
+              <summary className="cursor-pointer text-sm font-medium text-navy-700">{lib.plusDeReglages}<span data-actuellement className="mt-0.5 block text-sm font-normal text-navy-700">{resumen}</span></summary>
               <div className="mt-3 grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-2">{adv.map(field)}</div>
             </details>
           )}

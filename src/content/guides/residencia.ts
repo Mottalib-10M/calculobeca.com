@@ -30,8 +30,8 @@ ${h.table(['Umbral', 'Grado o máster presencial', 'Bachillerato o FP presencial
   ['2', `${h.eur(C.residencia)} + variable`, `${h.eur(C.residencia)} + ${h.eur(C.basica)} + variable`],
   ['3', 'Sin residencia', 'Sin residencia'],
 ], 'Lo que da la beca con residencia, matrícula completa, sin excelencia (variable: parte que se reparte al final)', ['l', 'r', 'r'])}
-<p>¿Por qué en bachillerato y FP el umbral 2 lleva ${h.eur(C.basica)} más que el umbral 1? Porque la beca básica no se suma a la cuantía ligada a la renta: en el umbral 1 la sustituyen los ${h.eur(C.renta)} de renta, que son más. Con menos renta se cobra más en total, no menos. Y en las tres columnas, «variable» es la parte que se reparte al final del curso, con un mínimo de ${h.eur(C.variableMin)}.</p>
-${h.mini('renta', { p: ['sust', 'fuera'], t: '¿Dos o más hijos en la universidad fuera de casa? Así baja la renta' })}
+<p>¿Por qué en bachillerato y FP aparece una línea de ${h.eur(C.basica)} en el umbral 2 y no en el 1? Porque la beca básica no se suma a la cuantía ligada a la renta: en el umbral 1 la sustituyen los ${h.eur(C.renta)} de renta, que son más. Con menos renta se cobra más en total, no menos. Y en los tres umbrales, «variable» es la parte que se reparte al final del curso, con un mínimo de ${h.eur(C.variableMin)}.</p>
+${h.mini('renta', { p: ['sust', 'fuera'], d: { fuera: 2 }, t: '¿Dos o más hijos en la universidad fuera de casa? Así baja la renta' })}
 <h2>Qué cuenta como domicilio familiar</h2>
 <p>Es el domicilio más próximo al centro que sea de un miembro computable o en el que viva habitualmente alguno, aunque no sea tu domicilio legal. Si tu madre vive en Madrid y tu padre, separado y miembro computable, en Salamanca, y estudias en Salamanca, no hay residencia. En los estudiantes independientes, el domicilio familiar es el que habitan durante el curso, así que tampoco hay residencia (artículo 17.3).</p>
 <h2>El gasto y su justificación</h2>
@@ -61,7 +61,7 @@ ${h.table(['Threshold', 'Degree or master\'s in person', 'Upper secondary or VET
   ['3', 'No residence', 'No residence'],
 ], 'What the grant gives with residence, full enrolment, no excellence (variable: the part shared out at the end)', ['l', 'r', 'r'])}
 <p>Why does threshold 2 carry ${h.eur(C.basica)} more than threshold 1 in upper secondary and VET? Because the basic grant cannot be combined with the income-linked amount: at threshold 1 it is replaced by the ${h.eur(C.renta)} income-linked amount, which is larger. Lower income still means more in total, not less. And in every column, «variable» is the part shared out at the end of the year, with a ${h.eur(C.variableMin)} minimum.</p>
-${h.mini('renta', { p: ['sust', 'fuera'], t: 'Two or more children at university away from home? See how income drops' })}
+${h.mini('renta', { p: ['sust', 'fuera'], d: { fuera: 2 }, t: 'Two or more children at university away from home? See how income drops' })}
 <h2>What counts as the family home</h2>
 <p>It is the home closest to the college that belongs to a counted member or where one usually lives, even if it is not your legal address. If your mother lives in Madrid and your father, separated and a counted member, in Salamanca, and you study in Salamanca, there is no residence amount. For independent students, the family home is where they live during the year, so there is no residence amount either (article 17.3).</p>
 <h2>The cost and the proof</h2>

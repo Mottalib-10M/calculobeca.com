@@ -36,7 +36,7 @@ const read = { es: `Cifras releídas en el BOE y en la convocatoria el ${gel}`, 
       <p class="mt-1 text-xs font-medium uppercase tracking-wide text-navy-500">{ui.independent}</p>
       <p class="mt-2 text-base text-navy-700 sm:text-lg">{x.intro}</p>
       {/* Parcours débutant (testeurs du 2026-11-08 : arrivés de Google sur une page de détail, ils ne savaient pas par où commencer). */}
-      {!(page.tool === 'beca' && !page.toolArg) && <p data-chrome class="mt-1 text-sm"><a href={`${route('home', lang)}#simulador`} class="font-medium text-accent-700 underline">{lang === 'es' ? '¿No sabes por dónde empezar? El simulador completo, con tres preguntas →' : 'Not sure where to start? The full simulator, in three questions →'}</a></p>}
+      {!(page.tool === 'beca' && !page.toolArg) && <p data-chrome class="mt-1 text-sm"><a href={`${route('home', lang)}#simulador`} class="font-medium text-accent-700 underline">{lang === 'es' ? '¿No sabes por dónde empezar? El simulador completo, en una sola pantalla →' : 'Not sure where to start? The full simulator, on one screen →'}</a></p>}
     </header>
     {/* Version courte partout, calendrier compris : la longue repoussait le premier champ sous l'écran du téléphone ; le résultat du calendrier dit déjà le prochain pas et la tabla garde la solicitud tardía. */}
     <AvisoPlazo lang={lang} corto />

@@ -206,10 +206,13 @@ describe('8. FAQ repliée', () => {
 });
 
 describe('9. champs repliés : valeur actuelle visible', () => {
-  it('le titre du repli dit « Ahora: … » avec chaque valeur cachée', () => {
+  // Le site ne reprend pas le « Ahora: » de la trame (testeurs du 2026-11-09) : chaque valeur cachée reste écrite,
+  // « libellé: valeur », en mots simples.
+  it('le titre du repli montre chaque valeur cachée, « libellé: valeur », sans « Ahora: »', () => {
     const h = renderToStaticMarkup(createElement(SpecTool, { kind: 'beca', lang: 'es' }));
     expect(h).toContain('Lo que hemos supuesto por ti');
-    expect(h).toMatch(/data-actuellement[^>]*>Ahora: Matrícula /);
+    expect(h).toMatch(/data-actuellement[^>]*>Curso entero \(60 créditos\) · Presencial · Rama: Ciencias Sociales y Jurídicas · Aprobado el curso pasado: 100/);
+    expect(h).not.toMatch(/data-actuellement[^>]*>Ahora/);
     const repli = h.slice(h.indexOf('<details data-repli'));
     expect(repli).toContain('id="t-mat"');
     expect(repli).not.toContain('id="t-renta"');

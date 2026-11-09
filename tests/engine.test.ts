@@ -112,28 +112,29 @@ describe('test naïf 2026-11-08', () => {
   it('portada: el resultado dice sí, pone la matrícula delante y el total incluye el mínimo variable', () => {
     const o = runTool('beca', 'es');
     expect(sp(o.value)).toBe('Matrícula gratis + 60 €');
-    expect(sp(o.sub)).toMatch(/^Sí, tendrías beca\. Dinero seguro: 60 €, el mínimo del extra que se reparte al final del curso\./);
+    expect(sp(o.sub)).toMatch(/^Sí, tendría beca\. Dinero seguro: 60 €, el mínimo de la ayuda extra de final de curso\. Suele llegar más/);
     expect(sp(o.sub)).toMatch(/La ayuda de 1700 € por renta baja es solo para el umbral 1: con 4 personas, hasta 22\.107 €/);
     expect(o.sub).not.toMatch(/RD 179|art\./);
-    expect(o.table!.rows[1][2]).toMatch(/beca básica solo en FP, bachillerato y otros estudios no universitarios/);
+    expect(o.table!.rows[1][2]).toMatch(/^Matrícula gratis, ayuda por vivir fuera de casa/);
     expect(o.rows.at(-1)).toEqual(['Tu umbral de renta (el 1 es el que más da)', 'Umbral 2 de 3']);
   });
   it('cuantías: el total seguro es la suma de las líneas mostradas', () => {
     for (const um of ['1', '2', '3']) {
       const o = runTool('cuantias', 'es', undefined, { um });
       const suma = o.rows.filter((r) => r[2] !== undefined).reduce((s, r) => s + (r[2] as number), 0);
-      if (o.value !== 'Solo matrícula') expect(eurN(o.value), um).toBe(suma);
-      expect(o.table!.rows.at(-1)![0]).toBe('Total (fijas + mínimo del extra)');
+      if (o.value !== 'Matrícula gratis') expect(eurN(o.value.replace(/^Matrícula gratis \+ /, '')), um).toBe(suma);
+      expect(o.table!.rows.at(-1)![0]).toBe('Total que se cobra (fijas + mínimo del extra)');
     }
   });
   it('residencia: 2700 € y un total seguro que lista sus 60 €', () => {
     const o = runTool('residencia', 'es');
     expect(sp(o.value)).toBe('2700 €');
-    expect(o.rows.map((r) => r[0])).toContain('Extra que se reparte al final (mínimo seguro)');
-    expect(sp(o.rows.at(-1))).toEqual(['Total si justificas el alquiler', '2760 €', 2760]);
+    expect(o.rows.map((r) => r[0])).toContain('Ayuda extra de final de curso');
+    expect(sp(o.rows.at(-1))).toEqual(['Total que se cobra si vive fuera y justifica el alquiler', '2760 €', 2760]);
+    expect(o.label).toMatch(/suponiendo que vive fuera/);
   });
   it('umbrales: dice qué se pierde al pasar al siguiente', () => {
-    expect(runTool('umbrales', 'es').sub).toMatch(/pasarías al umbral 3 y perderías la residencia y la parte variable/);
+    expect(runTool('umbrales', 'es').sub).toMatch(/pasaría al umbral 3 y perdería la ayuda por vivir fuera de casa y el extra de final de curso/);
   });
   it('matrícula: el umbral dice con qué familia y renta se calcula', () => {
     expect(sp(runTool('matricula', 'es').rows[1][0])).toBe('Umbral con 4 personas y 30.000 € de renta');
@@ -166,15 +167,17 @@ describe('mise en conformité 2026-11-09', () => {
   });
   it('cuantías : la même famille que la portada donne le même chiffre, et le titre dit en casa ou fuera', () => {
     const o = runTool('cuantias', 'es');
-    expect(sp(o.value)).toBe('60 €');
-    expect(o.label).toBe('Umbral 2 de 3, viviendo en casa: dinero seguro');
-    expect(runTool('cuantias', 'es', undefined, { fuera: 'si' }).label).toMatch(/viviendo fuera de casa: lo que cobrarías si justificas el alquiler/);
+    expect(sp(o.value)).toBe('Matrícula gratis + 60 €');
+    expect(sp(o.value)).toBe(sp(runTool('beca', 'es').value));
+    expect(o.label).toBe('Umbral 2 de 3, viviendo en casa');
+    expect(runTool('cuantias', 'es', undefined, { fuera: 'si' }).label).toMatch(/viviendo fuera de casa: lo que cobraría si justifica el alquiler/);
   });
   it('calendario : plazo cerrado, le grand chiffre est le prochain pas de l\'étudiant', () => {
     const o = runTool('calendario', 'es', undefined, { dia: 8, mes: '11', anio: 2026 });
-    expect(o.label).toBe('Tu próximo paso');
-    expect(o.value).toBe('Pedir la beca 2027-2028');
-    expect(o.sub).toMatch(/Si se mantiene la regla actual, contará la renta de 2026 de tu familia/);
+    expect(o.label).toBe('Ahora no hay ningún plazo abierto. Tu próximo paso');
+    expect(o.value).toBe('Preparar la beca 2027-2028');
+    expect(o.sub).toMatch(/aún no está abierto ni tiene fecha/);
+    expect(o.sub).toMatch(/Si se mantiene la regla actual, contará la renta de 2026 de la familia/);
     expect(sp(o.rows[1])).toEqual(['Si ya la pediste: próxima fecha', '4 de diciembre de 2026 · La administración: tú no haces nada']);
   });
   it('requisitos : un seul 90 % par sens', () => {
@@ -183,7 +186,7 @@ describe('mise en conformité 2026-11-09', () => {
     expect(o.rows.map((r) => r[0])).toEqual(['Resultado', 'Lo que se pide en Ciencias Sociales y Jurídicas']);
   });
   it('renta familiar : sans rebaja, la phrase le dit ; un seul enfant fuera ne baja nada', () => {
-    expect(runTool('renta', 'es').sub).toMatch(/Sin rebajas en tu caso/);
+    expect(runTool('renta', 'es').sub).toMatch(/Sin rebajas en este caso/);
     expect(runTool('renta', 'es', undefined, { fuera: 1 }).sub).toMatch(/Con un solo hijo fuera de casa no hay rebaja/);
   });
   it('matrícula : le prix d\'exemple est rappelé sous le chiffre', () => {
@@ -192,5 +195,34 @@ describe('mise en conformité 2026-11-09', () => {
   it('recurso : la notification d\'exemple est dans le passé', () => {
     const d = Object.fromEntries(getTool('recurso', 'es').inputs.map((i) => [i.id, i.def]));
     expect(`2026-${String(d.mes).padStart(2, '0')}-${String(d.dia).padStart(2, '0')}`.localeCompare(LAST_UPDATED)).toBeLessThan(0);
+  });
+});
+
+/* Testeurs du 2026-11-09 (second passage) : verrous des corrections. */
+describe('corrections ciblées 2026-11-09', () => {
+  const sp = (x: unknown) => JSON.parse(JSON.stringify(x).replace(/[  ]/g, ' '));
+  it('patrimoine : une question visible, et un résultat au-dessus de 100 % retire la beca', () => {
+    const spec = getTool('beca', 'es');
+    const b = spec.inputs.find((i) => i.id === 'bienes')!;
+    expect(b.adv).toBeFalsy(); expect(b.def).toBe('no');
+    expect(spec.inputs.find((i) => i.id === 'pat')!.adv).toBeFalsy();
+    expect(runTool('beca', 'es', undefined, { bienes: 'si', pat: 120 }).value).toBe('Sin beca');
+    expect(runTool('beca', 'es', undefined, { bienes: 'no', pat: 120 }).value).not.toBe('Sin beca');
+  });
+  it('l\'année de la renta est dite pour qui commence en 2027', () => {
+    expect(getTool('beca', 'es').inputs.find((i) => i.id === 'renta')!.label).toMatch(/2026 si empieza en septiembre de 2027/);
+  });
+  it('« Qué da » ne parle que des études choisies', () => {
+    const g = JSON.stringify(runTool('beca', 'es').table!.rows);
+    expect(g).not.toMatch(/beca básica/);
+    expect(JSON.stringify(runTool('beca', 'es', undefined, { estudio: 'bach' }).table!.rows)).toMatch(/Beca básica de 300/);
+  });
+  it('matrícula : pas de prix du crédit repassé sans crédit repassé', () => {
+    const p2 = getTool('matricula', 'es').inputs.find((i) => i.id === 'precio2')!;
+    expect(p2.when!({ seg: 0 })).toBe(false); expect(p2.when!({ seg: 6 })).toBe(true);
+  });
+  it('mini « hermanos fuera » : jamais 0 avec « contando al estudiante » sur la page residencia', () => {
+    expect(getTool('renta', 'es', { fuera: 2 }).inputs.find((i) => i.id === 'fuera')!.def).toBe(2);
+    expect(sp(runTool('renta', 'es', { fuera: 2 }).rows.map((r) => r[0]).join('|'))).toMatch(/Hijos universitarios fuera de casa/);
   });
 });
