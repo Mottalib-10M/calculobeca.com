@@ -1,0 +1,23 @@
+---
+/**
+ * Bandeau « où en est-on aujourd'hui » (test naïf du 2026-11-08 : les trois testeurs cherchaient en haut de page si le
+ * plazo était ouvert ; l'information n'était qu'au 7e écran). Dates : params-2026.json (plazoFin) et site-config (LAST_UPDATED).
+ */
+import P from '../data/params-2026.json';
+import { LAST_UPDATED } from '../data/site-config';
+import { displayDate } from '../lib/format';
+import { route, type Locale } from '../i18n/routes';
+interface Props { lang: Locale; enlace?: boolean }
+const { lang, enlace = true } = Astro.props;
+const tag = lang === 'es' ? 'es-ES' : 'en-GB';
+const hoy = displayDate(LAST_UPDATED, tag), fin = displayDate(P.convocatoria.plazoFin, tag);
+const abierto = LAST_UPDATED <= P.convocatoria.plazoFin;
+const tardia = LAST_UPDATED <= P.convocatoria.solicitudTardiaHasta ? displayDate(P.convocatoria.solicitudTardiaHasta, tag) : '';
+---
+{!abierto && (
+  <p class="mb-4 rounded-lg border-l-4 border-amber-500 bg-amber-50 px-3 py-2 text-sm text-navy-900">
+    {lang === 'es'
+      ? <><strong>Situación a {hoy}:</strong> el plazo de la beca 2026-2027 cerró el {fin} y la convocatoria 2027-2028 aún no se ha publicado. Si ya la pediste, vigila «Mis notificaciones».{tardia && ` Fuera de plazo solo cabe la solicitud tardía, hasta el ${tardia}, si el sustentador principal fallece o se jubila de forma forzosa.`} Si empiezas a estudiar en 2027, estas cifras son las de 2026-2027 y te sirven de orientación.{enlace && <>{' '}<a href={route('calendario', lang)} class="font-medium text-accent-700 underline">Qué preparar antes del próximo plazo</a></>}</>
+      : <><strong>Status on {hoy}:</strong> the 2026-2027 window closed on {fin} and the 2027-2028 call has not been published yet. If you already applied, keep an eye on «Mis notificaciones».{tardia && ` Outside the window, only a late application is possible, until ${tardia}, if the main earner dies or is forced to retire.`} If you start studying in 2027, these are the 2026-2027 figures and serve as a guide.{enlace && <>{' '}<a href={route('calendario', lang)} class="font-medium text-accent-700 underline">What to prepare before the next window</a></>}</>}
+  </p>
+)}

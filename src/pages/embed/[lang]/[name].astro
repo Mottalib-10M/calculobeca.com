@@ -1,0 +1,33 @@
+---
+/** Páginas para insertar (iframe): una herramienta sola, en español y en inglés. noindex, fuera del sitemap (astro.config). */
+import '../../../styles/global.css';
+import Tool from '../../../components/Tool.astro';
+import { SITE_URL, SITE_NAMES, LANG_TAGS } from '../../../data/site-config';
+import { route, hasRoute } from '../../../i18n/routes';
+import type { Lang } from '../../../lib/format';
+const EMBEDS = {
+  'simulador-beca': { kind: 'beca', page: 'home', t: { es: 'Simulador de la beca general 2026-2027', en: 'Spanish general study grant simulator 2026-2027' } },
+} as const;
+export function getStaticPaths() {
+  return (['es', 'en'] as const).flatMap((lang) => ['simulador-beca'].map((name) => ({ params: { lang, name } })));
+}
+const { lang, name } = Astro.params as { lang: Lang; name: keyof typeof EMBEDS };
+const e = EMBEDS[name];
+const page = `${SITE_URL}${route(hasRoute(e.page, lang) ? e.page : 'home', lang)}`;
+const note = { es: 'Sitio independiente, no es el Ministerio de Educación ni gestiona la solicitud · basado en datos de la Agencia Estatal Boletín Oficial del Estado (www.boe.es), releídos el 8 de noviembre de 2026 · herramienta de Radif Partners', en: 'Independent site, not the Ministry of Education, handles no applications · based on data from the Agencia Estatal Boletín Oficial del Estado (www.boe.es), re-read on 8 November 2026 · tool by Radif Partners' }[lang];
+---
+<!doctype html>
+<html lang={LANG_TAGS[lang]}>
+  <head>
+    <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{`${e.t[lang]} (${lang === 'es' ? 'para insertar' : 'embed'})`}</title>
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href={page} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+  </head>
+  <body class="bg-white p-2 text-navy-900">
+    <main><Tool kind={e.kind} lang={lang} idPrefix="embed" /></main>
+    <p class="mt-2 text-center text-xs text-navy-600"><a href={page} target="_blank" rel="noopener" class="underline">{SITE_NAMES[lang]}</a> · {note}</p>
+  </body>
+</html>

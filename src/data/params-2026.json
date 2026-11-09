@@ -1,0 +1,83 @@
+{
+  "_lisezmoi": "Tous les paramètres de la beca general du curso 2026-2027, relus le 2026-11-08 sur le BOE (XML officiel de BOE-A-2026-5713, texte consolidé de BOE-A-2008-821) et sur le texte complet de la convocatoria (BDNS 894743). Jamais en dur dans le code ni dans les pages. Au millésime suivant : copier en params-2027.json, relire chaque valeur dans le nouveau Real Decreto de umbrales y cuantías et la nouvelle convocatoria.",
+  "year": 2026,
+  "curso": "2026-2027",
+  "ejercicioRenta": 2025,
+  "retrieved_at": "2026-11-08",
+  "valid_from": "2026-03-13",
+  "valid_to": "2027-09-30",
+  "rd": { "numero": "179/2026", "fecha": "2026-03-11", "boe": "2026-03-12", "vigor": "2026-03-13", "id": "BOE-A-2026-5713" },
+  "convocatoria": {
+    "resolucion": "2026-03-23", "extractoBoe": "2026-03-25", "bdns": "894743",
+    "plazoInicio": "2026-04-07", "plazoFinOriginal": "2026-05-18", "plazoFin": "2026-05-19", "horaFin": "15:00",
+    "prorroga": "2026-05-18", "prorrogaBoe": "2026-05-20",
+    "solicitudTardiaHasta": "2026-12-31",
+    "ccaaComunicanFijas": "2026-12-04", "datosPersonalesHasta": "2026-07-15", "datosAcademicosHasta": "2026-12-04",
+    "subsanacionDias": 10, "alegacionesDias": 10,
+    "resolucionVariableMeses": 6,
+    "reposicionMeses": 1, "contenciosoMeses": 2,
+    "presupuesto": 1978000000, "presupuestoAdicional": 450000000,
+    "nacionalidadFecha": "2025-12-31", "tituloFecha": "2026-09-30", "masterGradoHasta": "2026-12-31"
+  },
+  "cuantias": {
+    "renta": 1700, "residencia": 2700, "basica": 300, "basicaGradoBasico": 350, "variableMin": 60,
+    "parcialRenta": 350, "parcialResidencia": 350,
+    "excelencia": [ { "desde": 8.0, "importe": 50 }, { "desde": 8.5, "importe": 75 }, { "desde": 9.0, "importe": 100 }, { "desde": 9.5, "importe": 125 } ],
+    "coefExcelencia": { "ingenieria": 1.17, "ciencias": 1.11, "salud": 1.05, "sociales": 1, "artes": 1 },
+    "discapacidad": { "d65": 0.5, "d25": 0.25 },
+    "insular": { "mayor": 442, "menor": 623, "mayorPeninsula": 888, "menorPeninsula": 937, "canariasFp": 300 },
+    "colaboracion": { "numero": 2431, "importe": 2000 }
+  },
+  "umbrales": {
+    "_nota": "RD 179/2026, art. 8.1, convocatoria general (extremo inferior de los intervalos de los umbrales 1 y 3, que es el que aplica la convocatoria del Ministerio, art. 19).",
+    "tabla": [
+      { "m": 1, "u1": 8843, "u1max": 9315, "u2": 13898, "u3": 14818, "u3max": 15567 },
+      { "m": 2, "u1": 13264, "u1max": 13971, "u2": 23724, "u3": 25293, "u3max": 26573 },
+      { "m": 3, "u1": 17685, "u1max": 18629, "u2": 32201, "u3": 34332, "u3max": 36070 },
+      { "m": 4, "u1": 22107, "u1max": 23286, "u2": 38242, "u3": 40773, "u3max": 42836 },
+      { "m": 5, "u1": 25644, "u1max": 27012, "u2": 42743, "u3": 45572, "u3max": 47878 },
+      { "m": 6, "u1": 29181, "u1max": 30738, "u2": 46142, "u3": 49196, "u3max": 51685 },
+      { "m": 7, "u1": 32718, "u1max": 34463, "u2": 49503, "u3": 52780, "u3max": 55451 },
+      { "m": 8, "u1": 36255, "u1max": 38190, "u2": 52850, "u3": 56348, "u3max": 59199 }
+    ],
+    "adicional": { "u1": 3536, "u1max": 3725, "u2": 3340, "u3": 3561, "u3max": 3740 }
+  },
+  "deducciones": {
+    "otrosMiembros": 0.5, "fnGeneral": 525, "fnEspecial": 800, "disc33": 1811, "disc65": 2881, "disc65UnivSolicitante": 4000,
+    "fueraDomicilio": 1176, "orfandad": 0.2, "monoparental": 500
+  },
+  "patrimonio": {
+    "urbanas": 47200, "construccionesRusticas": 47200, "rusticasPorMiembro": 14450, "capital": 1900, "premiosExentos": 1500, "actividades": 172000, "otrosMiembros": 0.5,
+    "navarra": 0.5,
+    "coeficientes": [
+      { "desde": 1990, "hasta": 2002, "c": 0.49 }, { "desde": 2003, "hasta": 2003, "c": 0.43 }, { "desde": 2004, "hasta": 2004, "c": 0.37 },
+      { "desde": 2005, "hasta": 2005, "c": 0.30 }, { "desde": 2006, "hasta": 2006, "c": 0.26 }, { "desde": 2007, "hasta": 2008, "c": 0.25 },
+      { "desde": 2009, "hasta": 2009, "c": 0.26 }, { "desde": 2010, "hasta": 2010, "c": 0.28 }, { "desde": 2011, "hasta": 2011, "c": 0.30 },
+      { "desde": 2012, "hasta": 2012, "c": 0.32 }, { "desde": 2013, "hasta": 2013, "c": 0.34 }, { "desde": 2014, "hasta": 2021, "c": 0.36 },
+      { "desde": 2022, "hasta": 2022, "c": 0.35 }, { "desde": 2023, "hasta": 2023, "c": 0.34 }, { "desde": 2024, "hasta": 2024, "c": 0.33 },
+      { "desde": 2025, "hasta": 2025, "c": 0.29 }
+    ]
+  },
+  "academico": {
+    "notaMinima": 5.0,
+    "notaAcceso": { "bachillerato": 0.6, "pau": 0.4 },
+    "porcentajeRama": { "artes": 90, "ciencias": 65, "sociales": 90, "salud": 80, "ingenieria": 65 },
+    "creditosCompleta": 60, "creditosParcialMin": 30, "creditosParcialRentaMin": 48,
+    "noUnivModulosHoras": 85, "noUnivHorasParcial": 500,
+    "notaNoPresentado": 2.5,
+    "masterCoefTecnicas": 1.17,
+    "reintegroUniv": 50, "reintegroUnivCienciasTecnicas": 40, "reintegroNoUniv": 50, "asistenciaNoUniv": 80,
+    "anosExtra": { "ingenieria": 2, "resto": 1 }
+  },
+  "sources": {
+    "rd179": { "url": "https://www.boe.es/buscar/doc.php?id=BOE-A-2026-5713", "label": { "es": "Real Decreto 179/2026, de 11 de marzo, umbrales de renta y patrimonio familiar y cuantías de las becas para el curso 2026-2027 (BOE núm. 63, de 12 de marzo de 2026)", "en": "Royal Decree 179/2026 of 11 March, income and wealth thresholds and grant amounts for 2026-2027 (BOE no. 63, 12 March 2026)" } },
+    "rd1721": { "url": "https://www.boe.es/buscar/act.php?id=BOE-A-2008-821", "label": { "es": "Real Decreto 1721/2007, de 21 de diciembre, régimen de las becas y ayudas al estudio personalizadas (BOE, texto consolidado, última actualización publicada el 12 de marzo de 2026)", "en": "Royal Decree 1721/2007 of 21 December, rules for personal study grants (BOE, consolidated text, last update published 12 March 2026)" } },
+    "convocatoria": { "url": "https://www.infosubvenciones.es/bdnstrans/GE/es/convocatoria/894743", "label": { "es": "Resolución de 23 de marzo de 2026, convocatoria de becas de carácter general para el curso 2026-2027, texto completo (Base de Datos Nacional de Subvenciones, BDNS 894743)", "en": "Resolution of 23 March 2026, general grant call for 2026-2027, full text (National Grants Database, BDNS 894743)" } },
+    "extracto": { "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2026-9261", "label": { "es": "Extracto de la convocatoria general 2026-2027 (BOE núm. 74, de 25 de marzo de 2026)", "en": "Summary of the 2026-2027 general call (BOE no. 74, 25 March 2026)" } },
+    "prorroga": { "url": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-2026-16327", "label": { "es": "Extracto de la Resolución de 18 de mayo de 2026 que prorroga el plazo de solicitud (BOE núm. 122, de 20 de mayo de 2026)", "en": "Summary of the Resolution of 18 May 2026 extending the application window (BOE no. 122, 20 May 2026)" } },
+    "simulador": { "url": "https://www.educacion.gob.es/simuladorbecas/formularioSimulacionVariable?idCurso=2025&secuenc=1", "label": { "es": "Ministerio de Educación, Formación Profesional y Deportes: simulador de la cuantía variable (último curso configurado: 2025-2026)", "en": "Ministry of Education, Vocational Training and Sport: variable-amount simulator (latest year set up: 2025-2026)" } },
+    "sede": { "url": "https://sede.educacion.gob.es/", "label": { "es": "Sede electrónica del Ministerio de Educación, Formación Profesional y Deportes (solicitud, «Mis expedientes», «Mis notificaciones»)", "en": "Ministry of Education e-office (application, «Mis expedientes», «Mis notificaciones»)" } },
+    "catastro": { "url": "https://www.sedecatastro.gob.es/", "label": { "es": "Sede Electrónica del Catastro (valor catastral y año de la última revisión)", "en": "Land Registry e-office (cadastral value and year of the last revaluation)" } },
+    "boeReutilizacion": { "url": "https://www.boe.es/informacion/aviso_legal/index.php", "label": { "es": "Agencia Estatal BOE: aviso legal y condiciones de reutilización (licencia tipo de 27 de junio de 2024)", "en": "BOE State Agency: legal notice and reuse conditions (standard licence of 27 June 2024)" } }
+  }
+}

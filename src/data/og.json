@@ -1,0 +1,20 @@
+{
+ "accent": "#AA151B",
+ "symbol": "BC",
+ "variants": [
+  {
+   "file": "og-es.png",
+   "title": "Beca general del Estado\n¿tengo derecho y cuánto?",
+   "subtitle": "Umbrales de renta y patrimonio, cuantías fijas y nota · en tu navegador",
+   "badge": "Datos: RD 179/2026 y convocatoria 2026-2027 (BOE)",
+   "brand": "Cálculo Beca"
+  },
+  {
+   "file": "og-en.png",
+   "title": "Spain's state study grant\nam I eligible, how much?",
+   "subtitle": "Income and wealth thresholds, fixed amounts, grades · in your browser",
+   "badge": "Data: RD 179/2026 and 2026-2027 call (BOE)",
+   "brand": "Cálculo Beca"
+  }
+ ]
+}

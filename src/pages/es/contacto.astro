@@ -1,0 +1,20 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { CONTACT_EMAIL, SITE_NAMES } from '../../data/site-config';
+import { route } from '../../i18n/routes';
+import { contactPageSchema } from '../../lib/seo';
+const lang = 'es';
+const description = 'Escríbenos si una cifra, un umbral o una fecha de la beca parece mal leída, o si quieres insertar el simulador. No tramitamos solicitudes ni vemos expedientes.';
+---
+<PageLayout title={`Contacto de ${SITE_NAMES[lang]}: avisar de un error`} description={description} lang={lang} noindex={true} jsonLd={[contactPageSchema({ name: 'Contacto', description, path: route('contact', lang), lang })]} breadcrumbs={[{ label: 'Contacto' }]} showAuthor={false}>
+  <div class="prose prose-slate max-w-none">
+    <h1>Contacto</h1>
+    <p>Correo: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+    <h2>Un error en una cifra o un caso mal resuelto</h2>
+    <p>Dinos la página, el dato que escribiste y lo que esperabas, y si puedes el artículo del Real Decreto o de la convocatoria que lo respalda. Lo comprobamos en el BOE antes de cambiar nada.</p>
+    <h2>Tu solicitud de beca</h2>
+    <p>Este sitio no es el Ministerio de Educación ni gestiona la solicitud: no podemos ver tu expediente ni cambiar nada. Para el estado de tu beca, entra en «Mis expedientes» de la sede electrónica del Ministerio o dirígete a la unidad de becas de tu universidad o consejería. No nos envíes declaraciones de la renta, DNI ni certificados.</p>
+    <h2>Insertar el simulador</h2>
+    <p>Centros educativos, asociaciones de estudiantes y orientadores pueden insertarlo gratis: <a href={route('widget', lang)}>instrucciones</a>.</p>
+  </div>
+</PageLayout>

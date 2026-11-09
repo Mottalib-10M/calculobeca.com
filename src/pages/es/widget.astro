@@ -1,0 +1,21 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { SITE_URL } from '../../data/site-config';
+import { route } from '../../i18n/routes';
+import { breadcrumbSchema } from '../../lib/seo';
+const lang = 'es';
+const code = `<iframe src="${SITE_URL}/embed/${lang}/simulador-beca/" title="Simulador de la beca general 2026-2027" width="100%" height="1000" style="border:0;max-width:1100px" loading="lazy"></iframe>`;
+---
+<PageLayout title="Insertar gratis el simulador de la beca general 2026-2027" description="Inserta gratis con un iframe el simulador de la beca general 2026-2027: umbrales, cuantías fijas y patrimonio. Las cifras se actualizan solas cuando cambia el BOE." lang={lang} noindex={true} jsonLd={[breadcrumbSchema([{ name: lang === 'es' ? 'Inicio' : 'Home', path: route('home', lang) }, { name: 'Widget', path: route('widget', lang) }])]} breadcrumbs={[{ label: 'Widget' }]} showAuthor={false}>
+  <header class="mb-6">
+    <h1 class="text-3xl font-bold text-navy-900 md:text-4xl">Insertar el simulador</h1>
+    <p class="mt-3 text-lg text-navy-700">Para centros educativos, asociaciones de estudiantes y orientadores: lo copias una vez y las cifras nuevas aparecen solas cuando se actualiza el BOE.</p>
+  </header>
+  <div class="prose prose-slate max-w-none">
+    <pre class="overflow-x-auto rounded-lg bg-navy-900 p-4 text-sm text-white"><code>{code}</code></pre>
+    <p set:html={`Para la versión inglesa, cambia <code>/embed/es/</code> por <code>/embed/en/</code>. Condiciones: el enlace bajo el simulador queda visible, no se modifica y se ofrece sin garantía. Lo que escriben tus lectores se queda en su equipo. El simulador no es del Ministerio de Educación ni gestiona la solicitud.`} />
+  </div>
+  <div class="mt-8 overflow-hidden rounded-xl border border-navy-200">
+    <iframe src={`/embed/${lang}/simulador-beca/`} title="Simulador de la beca general 2026-2027" width="100%" height="1000" style="border:0" loading="lazy"></iframe>
+  </div>
+</PageLayout>

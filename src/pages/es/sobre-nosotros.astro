@@ -1,0 +1,31 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import LegalIdentity from '../../components/LegalIdentity.astro';
+import { route } from '../../i18n/routes';
+import { AUTHOR_NAME, AUTHOR_DESC, CONTACT_EMAIL } from '../../data/site-config';
+import { srcLink } from '../../lib/helpers';
+import { profilePageSchema, breadcrumbSchema } from '../../lib/seo';
+const lang = 'es';
+const path = route('about', lang);
+const title = 'Quiénes somos: Cálculo Beca, editor independiente, 2026';
+const description = 'Cálculo Beca lo publica Radif Partners: calculadoras gratuitas sobre la beca general 2026-2027 hechas con el BOE. No es el Ministerio ni tramita solicitudes.';
+const s = (k: string, t: string) => srcLink(k, lang, t);
+---
+<PageLayout title={title} description={description} lang={lang} jsonLd={[profilePageSchema({ path, lang }), breadcrumbSchema([{ name: 'Inicio', path: route('home', lang) }, { name: 'Quiénes somos', path }])]} breadcrumbs={[{ label: 'Quiénes somos' }]}>
+  <article class="prose prose-slate max-w-none">
+    <h1>Quiénes somos</h1>
+    <p class="text-xs font-medium uppercase tracking-wide text-navy-500">Sitio independiente: no es el Ministerio de Educación ni gestiona la solicitud</p>
+    <p>{AUTHOR_DESC.es}</p>
+    <h2>Por qué existe</h2>
+    <p>Saber si te toca la beca exige cruzar una tabla de umbrales por miembros, una lista de deducciones, unos límites de patrimonio con coeficientes catastrales y un requisito académico distinto por rama. Las páginas que circulan copian la tabla, a veces con erratas o en una imagen, y no hacen la cuenta. El simulador oficial del Ministerio calcula solo la parte variable. Aquí la cuenta completa de las cuantías fijas se hace en un minuto, con el artículo al lado de cada cifra, y se dice con claridad lo que no se puede prever.</p>
+    <h2>Quién lo publica</h2>
+    <p>{AUTHOR_NAME}, una empresa que construye calculadoras a partir de normas públicas. No es una administración, ni una academia, ni una gestoría. No usa logotipos ni signos de ninguna administración, no cobra, no tiene enlaces de afiliación y no recoge teléfonos ni correos de estudiantes.</p>
+    <LegalIdentity lang={lang} />
+    <h2>Las fuentes</h2>
+    <p>Las cifras salen del <Fragment set:html={s('rd179', 'Real Decreto 179/2026')} />, del <Fragment set:html={s('rd1721', 'Real Decreto 1721/2007')} /> y de la <Fragment set:html={s('convocatoria', 'convocatoria general 2026-2027')} />. Basado en datos de la Agencia Estatal Boletín Oficial del Estado (<a href="https://www.boe.es" rel="nofollow noopener" target="_blank">www.boe.es</a>). El <a href={route('method', lang)}>método</a> explica cómo se aplican y la <a href={route('editorial', lang)}>política editorial</a>, cómo se corrigen.</p>
+    <h2>Lo que no hacemos</h2>
+    <p>No presentamos solicitudes, no vemos expedientes, no concedemos becas y no damos asesoramiento personal. El resultado del simulador es una estimación con las normas publicadas; la decisión es del Ministerio. Tus datos no salen de tu navegador: lo detalla la <a href={route('privacy', lang)}>política de privacidad</a>.</p>
+    <h2>Escríbenos</h2>
+    <p><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>, si encuentras una cifra mal leída o un caso que el simulador resuelve mal.</p>
+  </article>
+</PageLayout>

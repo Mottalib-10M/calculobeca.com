@@ -1,0 +1,85 @@
+---
+/**
+ * Inicio: el simulador completo arriba, la respuesta en un párrafo plegable, las tres preguntas que decide el
+ * Ministerio (renta, patrimonio, rendimiento), dos casos calculados, la tabla de umbrales, las fechas de la
+ * convocatoria, las páginas por familia y los textos largos en acordeones. Texto: src/content/home.ts.
+ */
+import PageLayout from '../layouts/PageLayout.astro';
+import Clamp from './Clamp.astro';
+import Tool from './Tool.astro';
+import Body from './Body.astro';
+import AvisoPlazo from './AvisoPlazo.astro';
+import { HOME } from '../content/home';
+import { route, hasRoute, type Locale } from '../i18n/routes';
+import { GROUPS } from '../i18n/nav';
+import { t } from '../i18n/ui';
+import { helpers, sourceList, table } from '../lib/helpers';
+import { GUIDES } from '../lib/pages';
+import { HITOS, quienTxt } from '../lib/tool-specs';
+import { displayDate } from '../lib/format';
+import { faqSchema, organizationSchema, websiteSchema, webPageSchema, webApplicationSchema } from '../lib/seo';
+interface Props { lang: Locale }
+const { lang } = Astro.props;
+const x = HOME[lang];
+const path = route('home', lang);
+const h = helpers(lang);
+const sources = sourceList(HOME.sources, lang);
+const jsonLd = [websiteSchema(lang), organizationSchema(lang), webPageSchema({ name: x.h1, description: x.description, path, lang }), webApplicationSchema({ name: x.h1, description: x.description, path, lang }), faqSchema(x.faqs, lang)];
+const ui = t(lang);
+const L = (es: string, en: string) => (lang === 'es' ? es : en);
+const tabla = table([L('Personas', 'People'), L('Umbral 1', 'Threshold 1'), L('Umbral 2', 'Threshold 2'), L('Umbral 3', 'Threshold 3')], HOME.fila(lang), L('Umbrales de renta familiar 2026-2027, en euros', 'Family income thresholds 2026-2027, in euros'), ['l', 'r', 'r', 'r'], lang);
+const fecha = (iso: string) => displayDate(iso, lang === 'es' ? 'es-ES' : 'en-GB');
+---
+<PageLayout title={x.title} description={x.description} lang={lang} jsonLd={jsonLd} faqs={x.faqs} sources={sources}>
+  <header class="mb-4">
+    <h1 class="text-[1.7rem] font-bold text-navy-900 max-sm:leading-tight sm:text-3xl md:text-4xl">{x.h1}</h1>
+    <p class="mt-1 text-xs font-medium uppercase tracking-wide text-navy-500">{ui.independent}</p>
+    <p class="mt-2 text-base text-navy-700 sm:text-lg">{x.intro}</p>
+  </header>
+  <AvisoPlazo lang={lang} />
+  <div data-outil data-chrome><Tool kind="beca" lang={lang} idPrefix="home" /></div>
+  <p class="mt-2 text-sm text-navy-600" data-chrome>{ui.privacyLine}</p>
+  <Clamp text={x.resume} lang={lang} id="clamp-home" class="my-8" />
+  <section class="mt-8">
+    <h2 class="text-2xl font-bold text-navy-900">{x.stepsTitle}</h2>
+    <ol class="mt-4 space-y-3">
+      {x.steps.map((s) => (
+        <li class="rounded-lg border-l-4 border-accent-500 bg-white px-4 py-3 shadow-sm">
+          <a href={route(s.id, lang)} class="font-semibold text-navy-900 hover:underline">{s.q}</a>
+          <p class="mt-1 text-sm text-navy-700">{s.a}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+  <section class="mt-10"><Body html={x.why(h)} path={path} lang={lang} /></section>
+  <section class="mt-10" data-chrome>
+    <Fragment set:html={tabla} />
+    <p class="text-sm text-navy-600"><a href={route('umbrales', lang)} class="font-medium text-accent-700 underline">{L('Tabla completa, de 1 a 8 miembros y más', 'Full table, 1 to 8 members and more')}</a></p>
+  </section>
+  <section class="mt-10" data-chrome>
+    <h2 class="text-2xl font-bold text-navy-900">{x.datesTitle}</h2>
+    <p class="mt-1 text-sm text-navy-600">{x.datesNote}</p>
+    <ul class="mt-4 border-l-2 border-navy-200 pl-5">
+      {HITOS.map((m) => <li class="relative mb-3"><span class="absolute -left-[1.6rem] top-1.5 h-2.5 w-2.5 rounded-full bg-accent-500" aria-hidden="true"></span><time datetime={m.iso} class="tabular-nums text-sm font-semibold text-navy-900">{fecha(m.iso)}</time><span class="block text-sm text-navy-700">{lang === 'es' ? m.es : m.en}</span><span class="block text-xs text-navy-600">{quienTxt(m.quien, lang)}</span></li>)}
+    </ul>
+    <p class="text-sm"><a href={route('calendario', lang)} class="font-medium text-accent-700 underline">{L('Calendario y qué toca ahora', 'Calendar and what comes next')}</a></p>
+  </section>
+  <section class="mt-10" data-chrome>
+    <h2 class="text-2xl font-bold text-navy-900">{x.guidesTitle}</h2>
+    <div class="mt-4 grid gap-6 md:grid-cols-3">
+      {GROUPS.map((g) => (
+        <div>
+          <h3 class="text-sm font-semibold uppercase tracking-wide text-accent-700">{g.label[lang]}</h3>
+          <ul class="mt-2 space-y-2 text-sm">
+            {GUIDES.filter((p) => p.group === g.id && hasRoute(p.id, lang)).map((p) => <li><a href={route(p.id, lang)} class="font-medium text-navy-900 underline-offset-2 hover:underline">{p[lang].nav}</a><span class="block text-navy-600">{p[lang].card}</span></li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+    <p class="mt-6 text-sm text-navy-700"><a href={route('method', lang)} class="font-medium text-accent-700 underline">{L('Cómo calcula el simulador y de dónde salen las cifras', 'How the simulator calculates and where the figures come from')}</a> · <a href={route('about', lang)} class="font-medium text-accent-700 underline">{L('Quién publica este sitio', 'Who publishes this site')}</a></p>
+  </section>
+  <section class="mt-10">
+    <h2 class="text-2xl font-bold text-navy-900">{x.foldTitle}</h2>
+    {x.sections(h).map((s) => <details class="fold"><summary><h3 class="fold-h">{s.title}</h3></summary><div class="pb-4"><Body html={s.html} path={path} lang={lang} /></div></details>)}
+  </section>
+</PageLayout>

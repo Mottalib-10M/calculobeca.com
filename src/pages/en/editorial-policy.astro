@@ -1,0 +1,28 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { AUTHOR_NAME, CONTACT_EMAIL, LAST_UPDATED, REVIEW_CYCLE_MONTHS, SITE_NAMES } from '../../data/site-config';
+import { route } from '../../i18n/routes';
+import { displayDate } from '../../lib/format';
+const lang = 'en';
+---
+<PageLayout title={`${SITE_NAMES[lang]} editorial policy: sources and corrections`} description="Which texts Cálculo Beca uses, in what order, how the calculators are tested, how often they are reviewed and how an error in a figure of Spain's general grant is corrected." lang={lang} noindex={true} breadcrumbs={[{ label: 'Editorial policy' }]} showAuthor={false}>
+  <div class="prose prose-slate max-w-none">
+    <h1>Editorial policy</h1>
+    <p>A miscopied grant figure can stop someone applying for aid they were entitled to. This page says where each figure comes from and what happens when we get one wrong.</p>
+    <h2>Responsibility</h2><p>{AUTHOR_NAME} is responsible for the content and the calculators. Contact: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+    <h2>Sources, in order</h2>
+    <ol>
+      <li><strong>The Official Gazette (BOE)</strong>: the yearly royal decree on thresholds and amounts and the consolidated Royal Decree 1721/2007;</li>
+      <li><strong>The full call</strong> from the Ministry, in the National Grants Database, with its summaries and extensions in the BOE;</li>
+      <li><strong>The Ministry's pages</strong> and e-office, only for what the texts leave out, such as the year set up in its simulator.</li>
+    </ol>
+    <p>We take no figures or dates from the press, tutoring schools, blogs or forums. If a news article contradicts the BOE, the BOE wins.</p>
+    <h2>Review</h2>
+    <p>Every figure lives in a single file with its source and reading date; pages and calculators read it from there. Full review at least every {REVIEW_CYCLE_MONTHS} months and whenever a new royal decree or call is published. Last review: {displayDate(LAST_UPDATED, 'en-GB')}.</p>
+    <h2>Corrections</h2>
+    <p>We check every report against the source. If there is an error, the figure is fixed in its file, a test case that would have caught it is added and the update date changes.</p>
+    <h2>Independence</h2>
+    <p>This site is not the Ministry of Education and does not handle applications. It sells no courses, collects no contact details and has no deals with tutoring schools or agencies.</p>
+    <p>More under <a href={route('about', lang)}>about</a> and in the <a href={route('method', lang)}>method</a>.</p>
+  </div>
+</PageLayout>

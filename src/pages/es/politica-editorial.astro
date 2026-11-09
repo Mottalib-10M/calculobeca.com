@@ -1,0 +1,28 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { AUTHOR_NAME, CONTACT_EMAIL, LAST_UPDATED, REVIEW_CYCLE_MONTHS, SITE_NAMES } from '../../data/site-config';
+import { route } from '../../i18n/routes';
+import { displayDate } from '../../lib/format';
+const lang = 'es';
+---
+<PageLayout title={`Política editorial de ${SITE_NAMES[lang]}: fuentes y erratas`} description="Qué textos usa Cálculo Beca, en qué orden pesan, cómo se prueban las calculadoras, cada cuánto se revisan y cómo se corrige un error en una cifra de la beca general." lang={lang} noindex={true} breadcrumbs={[{ label: 'Política editorial' }]} showAuthor={false}>
+  <div class="prose prose-slate max-w-none">
+    <h1>Política editorial</h1>
+    <p>Una cifra de beca mal copiada puede hacer que alguien no pida una ayuda a la que tenía derecho. Esta página dice de dónde sale cada dato y qué pasa cuando fallamos.</p>
+    <h2>Responsable</h2><p>{AUTHOR_NAME} responde del contenido y de las calculadoras. Contacto: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+    <h2>Fuentes, por orden</h2>
+    <ol>
+      <li><strong>El BOE</strong>: el real decreto anual de umbrales y cuantías y el Real Decreto 1721/2007 en su texto consolidado;</li>
+      <li><strong>La convocatoria completa</strong> del Ministerio, en la Base de Datos Nacional de Subvenciones, y sus extractos y prórrogas en el BOE;</li>
+      <li><strong>Las páginas del Ministerio</strong> y de su sede electrónica, solo para lo que los textos no detallan, como el curso configurado en su simulador.</li>
+    </ol>
+    <p>No tomamos cifras ni fechas de prensa, academias, blogs o foros. Si un artículo de prensa contradice el BOE, manda el BOE.</p>
+    <h2>Revisión</h2>
+    <p>Cada cifra está en un único fichero con su fuente y su fecha de lectura; las páginas y las calculadoras la leen de ahí. Revisión completa al menos cada {REVIEW_CYCLE_MONTHS} meses y siempre que se publique un real decreto o una convocatoria nuevos. Última revisión: {displayDate(LAST_UPDATED, 'es-ES')}.</p>
+    <h2>Correcciones</h2>
+    <p>Comprobamos cada aviso en la fuente. Si hay error, se corrige la cifra en su fichero, se añade un caso de prueba que lo habría detectado y se cambia la fecha de actualización.</p>
+    <h2>Independencia</h2>
+    <p>Este sitio no es el Ministerio de Educación ni gestiona la solicitud. No vende cursos, no capta datos de contacto y no tiene acuerdos con academias ni gestorías.</p>
+    <p>Más en <a href={route('about', lang)}>quiénes somos</a> y en el <a href={route('method', lang)}>método</a>.</p>
+  </div>
+</PageLayout>
