@@ -16,30 +16,36 @@ export default defineGuide({
     title: 'Beca de residencia 2026-2027: 2700 €, requisitos y umbral',
     description: 'Cuantía de residencia de la beca 2026-2027: 2700 € hasta el umbral 2 si estudias fuera de casa, presencial, matrícula completa y con gasto de alojamiento.',
     h1: 'Beca de residencia: 2700 euros por estudiar fuera de casa',
-    intro: 'Escribe la renta, los miembros y tus estudios: la calculadora dice si te corresponde la cuantía de residencia y cuánto, y el total seguro que suma con el resto de la beca.',
-    resume: `La cuantía fija ligada a la residencia, conocida como beca de residencia, es de ${eur(C.residencia, 'es')} en el curso 2026-2027 y la regula el artículo 7 de la convocatoria. La cobra quien necesita vivir fuera del domicilio familiar todo el curso por la distancia al centro, los transportes y los horarios, y estudia de forma presencial o semipresencial con matrícula completa. El límite de renta es el umbral 2: ${eur(u4.u2, 'es')} para una familia de cuatro miembros. Solo se paga si acreditas un gasto real de alquiler, residencia de estudiantes, colegio mayor o pensión, y nunca por encima de ese gasto. Con matrícula parcial de 48 a 59 créditos baja a un máximo de ${eur(C.parcialResidencia, 'es')}. En estudios no universitarios se comprueba además si hay un centro adecuado cerca de casa al que se pueda ir y volver en el día. Los estudiantes independientes no la cobran, porque su domicilio familiar es el del curso. Con una discapacidad del 65 % o más, en la universidad, sube a ${eur(C.residencia * (1 + C.discapacidad.d65), 'es')}.`,
+    intro: 'Escribe cuántas personas cuentan en la familia, su renta y los estudios: la calculadora dice si hay beca de residencia (la ayuda por vivir fuera de casa) y cuánto cobraría en total el estudiante si vive fuera.',
+    resume: `La beca de residencia es la ayuda por vivir fuera de casa: ${eur(C.residencia, 'es')} en el curso 2026-2027, que se suman al resto de la beca. La cobra quien tiene que vivir fuera de la casa familiar todo el curso porque su centro de estudios está lejos, estudia de forma presencial o semipresencial y matricula el curso entero. Hace falta que la renta de la familia no pase del umbral 2: ${eur(u4.u2, 'es')} para una familia de cuatro. Solo se paga si se justifica un gasto de alquiler, residencia de estudiantes, colegio mayor o pensión, y nunca más que ese gasto. Con una matrícula de 48 a 59 créditos baja a ${eur(C.parcialResidencia, 'es')} como máximo. En bachillerato y FP (formación profesional) se mira además si hay un centro cerca de casa al que se pueda ir y volver en el día. Con una discapacidad del 65 % o más, en la universidad, sube a ${eur(C.residencia * (1 + C.discapacidad.d65), 'es')}.`,
     faqs: [
-      { q: '¿Puedo cobrar la beca de residencia si vivo en un piso de mis tíos?', a: 'Solo si pagas un alquiler o un hospedaje y lo puedes acreditar. La convocatoria dice que el pago procede exclusivamente cuando se justifican gastos de alquiler o de alojamiento en pensión, residencia o establecimiento similar. Además, si el piso es de un miembro computable de tu familia o vive en él alguno, se considera domicilio familiar y no hay residencia.' },
+      { q: '¿Puedo cobrar la beca de residencia si vivo en un piso de mis tíos?', a: 'Solo si pagas un alquiler o un hospedaje y lo puedes demostrar con papeles. La ayuda se paga únicamente cuando hay un gasto de alquiler o de alojamiento en una pensión, una residencia o un sitio parecido. Además, si el piso es de alguien de la familia que cuenta para la beca, o vive en él, se considera casa familiar y no hay ayuda.' },
       { open: true, q: '¿Qué distancia hace falta para tener derecho a la residencia?', a: 'La convocatoria no fija kilómetros. Mira la distancia, los medios de transporte y los horarios de clase. En la universidad basta con que el centro donde te matriculaste esté lejos de casa; en bachillerato y FP se comprueba si existe un centro cercano que imparta tus estudios, con plazas y al que puedas ir y volver en el día.' },
-      { q: '¿Se cobra la residencia en una carrera a distancia o semipresencial?', a: `En semipresencial sí, con matrícula completa: el artículo 7 la incluye expresamente. En la enseñanza a distancia no, porque no hay que trasladarse. Los alumnos de universidades a distancia que viven en una isla sin centro asociado tienen en cambio el suplemento insular, de ${eur(C.insular.mayor, 'es')} o ${eur(C.insular.menor, 'es')} según la isla.` },
+      { q: '¿Se cobra la residencia en una carrera a distancia o semipresencial?', a: `En semipresencial sí, con el curso entero matriculado. A distancia no, porque no hay que mudarse. Quien estudia a distancia y vive en una isla sin centro de su universidad tiene en cambio el suplemento por vivir en una isla: ${eur(C.insular.mayor, 'es')} o ${eur(C.insular.menor, 'es')}, según la isla.` },
     ],
     body: (h) => `<h2>Los cinco requisitos de la residencia</h2>
-<p>El ${h.src('convocatoria', 'artículo 7 de la convocatoria')} junta cinco condiciones. Primera: renta familiar dentro del umbral 2. Segunda: estudios presenciales o semipresenciales. Tercera: matrícula completa, o de 48 a 59 créditos con el importe reducido. Cuarta: necesidad de residir fuera del domicilio familiar durante todo el curso. Quinta: un gasto de alquiler u hospedaje que se pueda justificar. Si falla cualquiera, la residencia no se paga, aunque el resto de la beca sí.</p>
+<ol>
+<li>Renta de la familia dentro del umbral 2.</li>
+<li>Estudios presenciales o semipresenciales.</li>
+<li>Curso entero matriculado, o de 48 a 59 créditos con menos dinero.</li>
+<li>Tener que vivir fuera de la casa familiar todo el curso.</li>
+<li>Un alquiler o un alojamiento que se pueda demostrar con papeles.</li>
+</ol>
+<p>Si falla uno, no hay ayuda por vivir fuera de casa, aunque el resto de la beca siga.</p>
 ${h.table(['Umbral', 'Grado o máster presencial', 'Bachillerato o FP presencial'], [
-  ['1', `${h.eur(C.renta)} + ${h.eur(C.residencia)} + variable`, `${h.eur(C.renta)} + ${h.eur(C.residencia)} + variable`],
-  ['2', `${h.eur(C.residencia)} + variable`, `${h.eur(C.residencia)} + ${h.eur(C.basica)} + variable`],
-  ['3', 'Sin residencia', 'Sin residencia'],
-], 'Lo que da la beca con residencia, matrícula completa, sin excelencia (variable: parte que se reparte al final)', ['l', 'r', 'r'])}
-<p>¿Por qué en bachillerato y FP aparece una línea de ${h.eur(C.basica)} en el umbral 2 y no en el 1? Porque la beca básica no se suma a la cuantía ligada a la renta: en el umbral 1 la sustituyen los ${h.eur(C.renta)} de renta, que son más. Con menos renta se cobra más en total, no menos. Y en los tres umbrales, «variable» es la parte que se reparte al final del curso, con un mínimo de ${h.eur(C.variableMin)}.</p>
-${h.mini('renta', { p: ['sust', 'fuera'], d: { fuera: 2 }, t: '¿Dos o más hijos en la universidad fuera de casa? Así baja la renta' })}
-<h2>Qué cuenta como domicilio familiar</h2>
-<p>Es el domicilio más próximo al centro que sea de un miembro computable o en el que viva habitualmente alguno, aunque no sea tu domicilio legal. Si tu madre vive en Madrid y tu padre, separado y miembro computable, en Salamanca, y estudias en Salamanca, no hay residencia. En los estudiantes independientes, el domicilio familiar es el que habitan durante el curso, así que tampoco hay residencia (artículo 17.3).</p>
-<h2>El gasto y su justificación</h2>
-<p>La cuantía nunca puede superar el coste real del alojamiento. Guarda el contrato de alquiler, los recibos o el certificado de la residencia o del colegio mayor: te los pueden pedir. Si en casa hay dos o más hermanos universitarios fuera, además la renta familiar se rebaja ${h.eur(D.fueraDomicilio)} por cada uno, lo que puede bajarte de umbral: compruébalo en la ${h.a('renta', 'calculadora de renta familiar')}.</p>
-<p>Con matrícula parcial de 48 a 59 créditos, la residencia se queda en un máximo de ${h.eur(C.parcialResidencia)}. Con una discapacidad del 25 al 64 %, un universitario cobra ${h.eur(C.residencia * (1 + C.discapacidad.d25))}, según el ${h.src('rd179', 'Real Decreto 179/2026')}. El resto de piezas de la beca están en ${h.a('cuantias', 'cuantías')}.</p>
-<h2>Casos particulares</h2>
-<p>En las enseñanzas artísticas superiores no se mira si hay un centro más cercano a casa que el tuyo (artículo 7.5). Las becas de residencia de MUFACE son compatibles con la beca general, pero no con su cuantía de residencia (artículo 55.4). Y si el alojamiento ya lo cubren servicios o fondos públicos, como una plaza gratuita en una residencia pública, no se concede (artículo 13.4).</p>`,
+  ['1', `${h.eur(C.renta)} + ${h.eur(C.residencia)} + extra de final de curso`, `${h.eur(C.renta)} + ${h.eur(C.residencia)} + extra de final de curso`],
+  ['2', `${h.eur(C.residencia)} + extra de final de curso`, `${h.eur(C.residencia)} + ${h.eur(C.basica)} + extra de final de curso`],
+  ['3', 'Sin ayuda por vivir fuera', 'Sin ayuda por vivir fuera'],
+], 'Lo que da la beca a quien vive fuera de casa, curso entero, sin premio por buena nota', ['l', 'r', 'r'])}
+<p>En bachillerato y FP, el umbral 1 lleva los ${h.eur(C.renta)} por renta baja en lugar de la beca básica de ${h.eur(C.basica)}: no se suman.</p>
+<h2>Qué cuenta como casa familiar</h2>
+<p>Es la casa más cercana al centro de estudios en la que vive alguien de la familia que cuenta para la beca.</p>
+<p>Si la madre vive en Madrid y el padre, separado, en Salamanca, y el estudiante estudia en Salamanca, no hay ayuda por vivir fuera. Quien vive solo de sus propios ingresos tampoco la tiene: su casa es la del curso.</p>
+<h2>Cómo se justifica el gasto</h2>
+<p>Guarda el contrato de alquiler, los recibos o el certificado de la residencia o del colegio mayor: te los pueden pedir. La ayuda nunca pasa de lo que cuesta el alojamiento.</p>
+<p>Si en casa hay dos o más hijos en la universidad fuera de casa, la renta de la familia se rebaja ${h.eur(D.fueraDomicilio)} por cada uno. Puede bajar de umbral: compruébalo en la ${h.a('renta', 'calculadora de renta familiar')}.</p>`,
   },
+
   en: {
     slug: 'residence-grant',
     nav: 'Residence grant', card: 'The €2,700 for studying away from home: who gets it, up to which income and what you must prove',
@@ -61,13 +67,12 @@ ${h.table(['Threshold', 'Degree or master\'s in person', 'Upper secondary or VET
   ['3', 'No residence', 'No residence'],
 ], 'What the grant gives with residence, full enrolment, no excellence (variable: the part shared out at the end)', ['l', 'r', 'r'])}
 <p>Why does threshold 2 carry ${h.eur(C.basica)} more than threshold 1 in upper secondary and VET? Because the basic grant cannot be combined with the income-linked amount: at threshold 1 it is replaced by the ${h.eur(C.renta)} income-linked amount, which is larger. Lower income still means more in total, not less. And in every column, «variable» is the part shared out at the end of the year, with a ${h.eur(C.variableMin)} minimum.</p>
-${h.mini('renta', { p: ['sust', 'fuera'], d: { fuera: 2 }, t: 'Two or more children at university away from home? See how income drops' })}
 <h2>What counts as the family home</h2>
 <p>It is the home closest to the college that belongs to a counted member or where one usually lives, even if it is not your legal address. If your mother lives in Madrid and your father, separated and a counted member, in Salamanca, and you study in Salamanca, there is no residence amount. For independent students, the family home is where they live during the year, so there is no residence amount either (article 17.3).</p>
 <h2>The cost and the proof</h2>
 <p>The amount can never exceed the real cost of housing. Keep the lease, the receipts or the certificate from the hall or college residence: you may be asked for them. If two or more siblings at university live away from home, family income also drops by ${h.eur(D.fueraDomicilio)} for each, which can move you down a threshold: check it in the ${h.a('renta', 'family income calculator')}.</p>
 <p>With part-time enrolment of 48 to 59 credits, residence is capped at ${h.eur(C.parcialResidencia)}. With a disability of 25 to 64%, a university student gets ${h.eur(C.residencia * (1 + C.discapacidad.d25))}, under ${h.src('rd179', 'Royal Decree 179/2026')}. The other parts of the grant are under ${h.a('cuantias', 'amounts')}.</p>
-<h2>Special cases</h2>
+<h3>Special cases</h3>
 <p>In higher arts education nobody checks whether a centre closer to home exists (article 7.5). MUFACE residence grants for civil servants' families can be combined with the general grant, but not with its residence amount (article 55.4). And if housing is already covered by public services or funds, such as a free place in a public hall, the residence amount is not awarded (article 13.4).</p>`,
   },
 });

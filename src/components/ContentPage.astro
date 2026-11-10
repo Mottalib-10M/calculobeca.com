@@ -26,8 +26,6 @@ if (x.faqs.length) jsonLd.push(faqSchema(x.faqs, lang));
 const related = page.related.filter((id) => hasRoute(id, lang)).map((id) => ({ href: route(id, lang), name: label(id, lang), description: guideById(id)?.[lang]?.card ?? (id === 'home' ? HOME[lang].homeCard : '') }));
 const sources = sourceList(page.sources, lang);
 const tag = LANG_TAGS[lang];
-const gel = displayDate(LAST_UPDATED, tag);
-const read = { es: `Cifras releídas en el BOE y en la convocatoria el ${gel}`, en: `Figures re-read in the BOE and the call on ${gel}` }[lang];
 ---
 <PageLayout title={x.title} description={x.description} lang={lang} jsonLd={jsonLd} faqs={x.faqs} related={related} sources={sources} breadcrumbs={[{ label: group.label[lang] }, { label: x.nav }]}>
   <article>
@@ -41,7 +39,8 @@ const read = { es: `Cifras releídas en el BOE y en la convocatoria el ${gel}`, 
     {/* Version courte partout, calendrier compris : la longue repoussait le premier champ sous l'écran du téléphone ; le résultat du calendrier dit déjà le prochain pas et la tabla garde la solicitud tardía. */}
     <AvisoPlazo lang={lang} corto />
     <div data-outil data-chrome class="mb-4"><Tool kind={page.tool} lang={lang} arg={page.toolArg} idPrefix={`p${page.order}`} /></div>
-    <p class="mb-6 text-sm text-navy-600">{ui.reviewedBy} <a href={route('about', lang)} class="underline hover:text-navy-900">{AUTHOR_NAME}</a> · <a href={route('method', lang)} class="underline hover:text-navy-900">{label('method', lang)}</a> · {read}</p>
+    {/* La date de relecture n'est plus répétée ici : le bloc éditeur et le pied de page la donnent (testeurs du 2026-11-10). */}
+    <p class="mb-6 text-sm text-navy-600">{ui.reviewedBy} <a href={route('about', lang)} class="underline hover:text-navy-900">{AUTHOR_NAME}</a> · <a href={route('method', lang)} class="underline hover:text-navy-900">{label('method', lang)}</a></p>
     <Clamp text={x.resume} lang={lang} id={`clamp-${page.id}`} class="mb-8" />
     <Body html={x.body(helpers(lang))} path={path} lang={lang} plegar />
   </article>

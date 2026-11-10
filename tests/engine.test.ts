@@ -112,11 +112,14 @@ describe('test naïf 2026-11-08', () => {
   it('portada: el resultado dice sí, pone la matrícula delante y el total incluye el mínimo variable', () => {
     const o = runTool('beca', 'es');
     expect(sp(o.value)).toBe('Matrícula gratis + 60 €');
-    expect(sp(o.sub)).toMatch(/^Sí, tendría beca\. Dinero seguro: 60 €, el mínimo de la ayuda extra de final de curso\. Suele llegar más/);
-    expect(sp(o.sub)).toMatch(/La ayuda de 1700 € por renta baja es solo para el umbral 1: con 4 personas, hasta 22\.107 €/);
+    // Testeurs du 2026-11-10 : lignes courtes, une idée et un chiffre chacune, et la ligne « Supone » sous le chiffre.
+    expect(sp(o.sub).split('\n')[0]).toBe('Sí, tendría beca.');
+    expect(sp(o.sub)).toMatch(/\nLos 60 € son el mínimo del extra de final de curso: suele llegar más/);
+    expect(sp(o.sub)).toMatch(/\nLos 1700 € por renta baja solo llegan con menos renta: hasta 22\.107 € con 4 personas\./);
+    expect(sp(o.hyp)).toBe('Supone: 4 personas, 30.000 € de renta, grado universitario, primer curso, nota 7, vive en casa.');
     expect(o.sub).not.toMatch(/RD 179|art\./);
     expect(o.table!.rows[1][2]).toMatch(/^Matrícula gratis, ayuda por vivir fuera de casa/);
-    expect(o.rows.at(-1)).toEqual(['Tu umbral de renta (el 1 es el que más da)', 'Umbral 2 de 3']);
+    expect(o.rows.at(-1)).toEqual(['Tramo de renta de la familia (umbral; el 1 es el de menos renta y el que más da)', 'Umbral 2 de 3']);
   });
   it('cuantías: el total seguro es la suma de las líneas mostradas', () => {
     for (const um of ['1', '2', '3']) {
@@ -126,12 +129,14 @@ describe('test naïf 2026-11-08', () => {
       expect(o.table!.rows.at(-1)![0]).toBe('Total que se cobra (fijas + mínimo del extra)');
     }
   });
-  it('residencia: 2700 € y un total seguro que lista sus 60 €', () => {
+  // Testeurs du 2026-11-10 : un seul gros chiffre, au format de la portada, l'hypothèse « fuera » en tête, et le chiffre « en casa » nommé.
+  it('residencia: un seul total, l\'hypothèse avant le chiffre, les 2700 € nommés en ligne', () => {
     const o = runTool('residencia', 'es');
-    expect(sp(o.value)).toBe('2700 €');
-    expect(o.rows.map((r) => r[0])).toContain('Ayuda extra de final de curso');
-    expect(sp(o.rows.at(-1))).toEqual(['Total que se cobra si vive fuera y justifica el alquiler', '2760 €', 2760]);
-    expect(o.label).toMatch(/suponiendo que vive fuera/);
+    expect(sp(o.value)).toBe('Matrícula gratis + 2760 €');
+    expect(o.label).toBe('Si vive fuera de casa y justifica el alquiler');
+    expect(sp(o.rows[0])).toEqual(['De ellos, ayuda por vivir fuera de casa (residencia)', '2700 €', 2700]);
+    expect(o.rows.map((r) => r[0])).toContain('Extra de final de curso (cuantía variable)');
+    expect(sp(o.hyp)).toMatch(/Viviendo en casa: Matrícula gratis \+ 60 €, como en la portada\./);
   });
   it('umbrales: dice qué se pierde al pasar al siguiente', () => {
     expect(runTool('umbrales', 'es').sub).toMatch(/pasaría al umbral 3 y perdería la ayuda por vivir fuera de casa y el extra de final de curso/);
@@ -142,7 +147,9 @@ describe('test naïf 2026-11-08', () => {
   it('nota: en primero no aparece la media de segundo; la excelencia dice cuánto falta', () => {
     const o = runTool('nota', 'es');
     expect(JSON.stringify(o.rows)).not.toMatch(/7,8/);
-    expect(sp(o.rows[1][1])).toBe('Sin excelencia: te faltan 0,4 puntos para 50 €');
+    // Même nota 7 que la portada (testeurs du 2026-11-10).
+    expect(sp(o.value)).toBe('7');
+    expect(sp(o.rows[1][1])).toBe('Sin premio por buena nota: te falta 1 punto para 50 €');
   });
   it('calendario: plazo abierto, cuenta atrás de lo que haces tú; plazo cerrado, la fecha de la administración dice que no hay nada que hacer', () => {
     const abierto = runTool('calendario', 'es', undefined, { dia: 20, mes: '4', anio: 2026 });
@@ -176,8 +183,9 @@ describe('mise en conformité 2026-11-09', () => {
     const o = runTool('calendario', 'es', undefined, { dia: 8, mes: '11', anio: 2026 });
     expect(o.label).toBe('Ahora no hay ningún plazo abierto. Tu próximo paso');
     expect(o.value).toBe('Preparar la beca 2027-2028');
-    expect(o.sub).toMatch(/aún no está abierto ni tiene fecha/);
-    expect(o.sub).toMatch(/Si se mantiene la regla actual, contará la renta de 2026 de la familia/);
+    expect(o.sub).toMatch(/Aún no hay nada que pedir: su plazo no tiene fecha/);
+    expect(o.sub).toMatch(/Qué puedes hacer ya: 1\) Guardar la declaración de la renta de 2026/);
+    expect(o.sub).not.toMatch(/revisa ya .* cuando la tengas/);
     expect(sp(o.rows[1])).toEqual(['Si ya la pediste: próxima fecha', '4 de diciembre de 2026 · La administración: tú no haces nada']);
   });
   it('requisitos : un seul 90 % par sens', () => {
@@ -190,7 +198,10 @@ describe('mise en conformité 2026-11-09', () => {
     expect(runTool('renta', 'es', undefined, { fuera: 1 }).sub).toMatch(/Con un solo hijo fuera de casa no hay rebaja/);
   });
   it('matrícula : le prix d\'exemple est rappelé sous le chiffre', () => {
-    expect(sp(runTool('matricula', 'es').sub)).toMatch(/^60 créditos × 20 € por crédito \(precio de ejemplo: pon el de tu universidad\)\./);
+    // Testeurs du 2026-11-10 : le prix d'exemple passe dans le titre, avant le chiffre.
+    const o = runTool('matricula', 'es');
+    expect(sp(o.label)).toBe('Con un precio de ejemplo de 20 € el crédito: lo que la familia deja de pagar');
+    expect(sp(o.hyp)).toMatch(/^Supone: 60 créditos nuevos × 20 €, curso entero 2026-2027\./);
   });
   it('recurso : la notification d\'exemple est dans le passé', () => {
     const d = Object.fromEntries(getTool('recurso', 'es').inputs.map((i) => [i.id, i.def]));
@@ -210,7 +221,10 @@ describe('corrections ciblées 2026-11-09', () => {
     expect(runTool('beca', 'es', undefined, { bienes: 'no', pat: 120 }).value).not.toBe('Sin beca');
   });
   it('l\'année de la renta est dite pour qui commence en 2027', () => {
-    expect(getTool('beca', 'es').inputs.find((i) => i.id === 'renta')!.label).toMatch(/2026 si empieza en septiembre de 2027/);
+    // L'année passe dans l'aide, avec la règle simple et l'issue « ¿No la sabes? » (testeurs du 2026-11-10).
+    const r = getTool('beca', 'es').inputs.find((i) => i.id === 'renta')!;
+    expect(r.help).toMatch(/si empieza en septiembre de 2027 contará la de 2026/);
+    expect(r.help).toMatch(/¿No la sabes\? Pon lo que entra en casa/);
   });
   it('« Qué da » ne parle que des études choisies', () => {
     const g = JSON.stringify(runTool('beca', 'es').table!.rows);

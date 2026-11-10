@@ -10,7 +10,13 @@ export interface SelectIn { kind: 'select'; id: string; label: string; def: stri
 export type Input = NumIn | ChoiceIn | SelectIn;
 export interface OutTable { caption?: string; headers: string[]; rows: string[][]; align?: Array<'l' | 'r'> }
 export interface ToolOut {
-  label: string; value: string; sub?: string;
+  label: string; value: string;
+  /** Ce que suppose le gros chiffre et sur quelle période (testeurs du 2026-11-10 : « 60 €, 1200 € ou 2700 € ? »). */
+  hyp?: string;
+  /** Lignes courtes séparées par « \n » : une phrase, un chiffre (testeurs du 2026-11-10 : « un mur de texte »). */
+  sub?: string;
+  /** Lien sous les lignes (« Cuánto vale la matrícula gratis en tu universidad »). */
+  link?: { href: string; text: string };
   rows: Array<[string, string, number?]>;
   table?: OutTable;
   /** Tableaux supplémentaires, sous le premier. */

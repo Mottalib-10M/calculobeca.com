@@ -58,7 +58,7 @@ export default function SpecTool({ kind, lang, arg, methodHref, idPrefix = 't' }
   const field = (i: Input) => {
     const id = `${idPrefix}-${i.id}`;
     const cls = i.wide ? 'sm:col-span-2' : '';
-    if (i.kind === 'choice') return <div key={i.id} className={`grid grid-rows-subgrid row-span-3 ${cls}`}><Choice id={id} label={i.label} value={String(rv[i.id])} options={i.options} onChange={set(i.id)} /></div>;
+    if (i.kind === 'choice') return <div key={i.id} className={`grid grid-rows-subgrid row-span-3 ${cls}`}><Choice id={id} label={i.label} value={String(rv[i.id])} options={i.options} onChange={set(i.id)} help={i.help} /></div>;
     if (i.kind === 'select') return <SelectField key={i.id} id={id} label={i.label} value={String(rv[i.id])} onChange={set(i.id)} options={optsOf(i, rv)} help={i.help} className={cls} />;
     return <NumberField key={i.id} id={id} label={i.label} value={Number(rv[i.id])} onChange={set(i.id)} unit={i.unit} max={i.max} decimals={i.decimals} help={i.help} link={i.link} className={cls} lang={lang} />;
   };
@@ -87,7 +87,7 @@ export default function SpecTool({ kind, lang, arg, methodHref, idPrefix = 't' }
             </details>
           )}
         </form>
-        <ResultCard label={out.label} value={out.value} sub={out.sub} pre={exemple ? <Exemple exemple={lib.exemple} aide={lib.exempleAide} /> : undefined}>
+        <ResultCard label={out.label} value={out.value} hyp={out.hyp} sub={out.sub} link={out.link} pre={exemple ? <Exemple exemple={lib.exemple} aide={lib.exempleAide} /> : undefined}>
           <Rows rows={out.rows} />
           {out.note && <p className="mt-2 text-xs text-navy-600">{out.note}</p>}
           <ShareRow methodHref={methodHref} labels={ui} />

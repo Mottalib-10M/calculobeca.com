@@ -53,7 +53,10 @@ describe('fichiers de contenu', () => {
         expect(words(x.resume), x.resume).toBeGreaterThanOrEqual(120);
         expect(x.resume).not.toMatch(/\n\s*\n|<p>/);
       });
-      it('corps : au moins 300 mots de prose, tableaux à part', () => { expect(words(text(x.body))).toBeGreaterThanOrEqual(300); });
+      // Pages plus courtes (brief de l'éditeur du 2026-11-10, règle 3 : au plus 3 sections et 3 questions) : le plancher
+      // passe de 300 à 150 mots de prose ; check-seo garde ses 500 mots par page outil (data-outil).
+      it('corps : au moins 150 mots de prose, tableaux à part', () => { expect(words(text(x.body))).toBeGreaterThanOrEqual(150); });
+      it('corps : au plus 3 sections H2', () => { expect(x.body.match(/<h2[\s>]/g)?.length ?? 0).toBeLessThanOrEqual(3); });
       it('aucune tournure interdite ni tiret long', () => {
         const res = [...BANNED_ALL, ...(x.lang === 'en' ? BANNED_EN : BANNED_ES)];
         for (const re of res) for (const part of [x.title, x.description, x.intro, x.resume, x.body, ...x.faqs.flatMap((f) => [f.q, f.a])]) expect(part, String(re)).not.toMatch(re);
@@ -70,7 +73,8 @@ describe('fichiers de contenu', () => {
       it('pages liées et minis existent', () => {
         for (const r of x.related) expect(ROUTES.some((y) => y.id === r) || PLANNED_IDS.has(r), r).toBe(true);
         for (const m of x.body.matchAll(/<!--mini:([A-Za-z0-9_]+)/g)) expect(TOOL_KINDS, m[1]).toContain(m[1]);
-        expect(x.body.match(/<!--mini:/g)?.length ?? 0, 'au moins un mini-simulateur').toBeGreaterThanOrEqual(1);
+        // Plus de mini-calculateur répété dans une page ni d'une page à l'autre : un lien suffit (brief du 2026-11-10, règle 3).
+        expect(x.body.match(/<!--mini:/g)?.length ?? 0, 'aucun mini-simulateur répété').toBe(0);
         expect(x.body).not.toMatch(/undefined|NaN|\[object Object\]|\bnull\b|Infinity/);
         expect(x.resume + x.description + x.title + x.intro + JSON.stringify(x.faqs)).not.toMatch(/undefined|NaN|\bnull\b|Infinity/);
       });

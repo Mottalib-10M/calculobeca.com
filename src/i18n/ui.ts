@@ -13,7 +13,7 @@ const es = {
   readMore: 'Seguir leyendo',
   // Libellés de la trame (lib/libelles-trame.ts) tutoyés : le site tutoie partout, la trame vouvoie en espagnol.
   trama: { exemple: 'Ejemplo, todavía no es tu resultado', exempleAide: 'cambia una cifra para ver el tuyo', plusDeReglages: 'Lo que hemos supuesto por ti (ábrelo y cámbialo si no es tu caso)', faqAide: 'Toca una pregunta para ver la respuesta.' } as Partial<LibellesTrame>,
-  privacyLine: 'No pedimos nombre, DNI ni correo: el cálculo se hace en tu navegador y lo que escribes no se envía a ningún sitio. Solo esta pestaña lo recuerda, para que no tengas que repetirlo en cada página, y lo olvida al cerrarla.',
+  privacyLine: 'No pedimos nombre, DNI ni correo: el cálculo se hace en tu navegador y no se envía nada. Esta pestaña lo recuerda para no repetirlo en cada página, y lo olvida al cerrarla.',
   copyLink: 'Copiar el enlace', copied: 'Enlace copiado', print: 'Imprimir', howComputed: 'Cómo se calcula', openFull: 'Abrir la calculadora completa',
   independent: 'Sitio independiente: no es el Ministerio de Educación',
 };
@@ -29,7 +29,7 @@ const en: typeof es = {
   notFound: 'Nothing lives at this address. The home page works out whether you qualify for the general state grant and which fixed amounts apply.',
   readMore: 'Read more',
   trama: { plusDeReglages: 'What we assumed for you (open it and change anything that is not your case)' } as Partial<LibellesTrame>,
-  privacyLine: 'We ask for no name, ID or email: the calculation runs in your browser and nothing you type is sent anywhere. Only this tab remembers it, so you do not have to type it again on each page, and forgets it when you close it.',
+  privacyLine: 'We ask for no name, ID or email: the calculation runs in your browser and nothing is sent. This tab remembers it so you need not retype it on each page, and forgets it when closed.',
   copyLink: 'Copy share link', copied: 'Link copied', print: 'Print', howComputed: 'How this is calculated', openFull: 'Open the full calculator',
   independent: 'Independent site: not the Ministry of Education',
 };

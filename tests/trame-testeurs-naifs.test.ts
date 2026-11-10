@@ -211,7 +211,11 @@ describe('9. champs repliés : valeur actuelle visible', () => {
   it('le titre du repli montre chaque valeur cachée, « libellé: valeur », sans « Ahora: »', () => {
     const h = renderToStaticMarkup(createElement(SpecTool, { kind: 'beca', lang: 'es' }));
     expect(h).toContain('Lo que hemos supuesto por ti');
-    expect(h).toMatch(/data-actuellement[^>]*>Curso entero \(60 créditos\) · Presencial · Rama: Ciencias Sociales y Jurídicas · Aprobado el curso pasado: 100/);
+    // En primero, rama y aprobado no cuentan : masqués (testeurs du 2026-11-10).
+    expect(h).toMatch(/data-actuellement[^>]*>Curso entero \(60 créditos\) · Presencial · No vive en una isla/);
+    expect(h).not.toContain('id="t-aprob"');
+    const h2 = renderToStaticMarkup(createElement(SpecTool, { kind: 'beca', lang: 'es', arg: JSON.stringify({ curso: 'posterior' }) }));
+    expect(h2.slice(0, h2.indexOf('<details data-repli'))).toContain('id="t-aprob"');
     expect(h).not.toMatch(/data-actuellement[^>]*>Ahora/);
     const repli = h.slice(h.indexOf('<details data-repli'));
     expect(repli).toContain('id="t-mat"');

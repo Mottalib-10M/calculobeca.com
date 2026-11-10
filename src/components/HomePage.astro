@@ -7,13 +7,13 @@
 import PageLayout from '../layouts/PageLayout.astro';
 import Clamp from './Clamp.astro';
 import Tool from './Tool.astro';
-import Body from './Body.astro';
 import AvisoPlazo from './AvisoPlazo.astro';
 import { HOME } from '../content/home';
 import { route, hasRoute, type Locale } from '../i18n/routes';
 import { GROUPS } from '../i18n/nav';
 import { t } from '../i18n/ui';
-import { helpers, sourceList, table } from '../lib/helpers';
+import { sourceList } from '../lib/helpers';
+import { LAST_UPDATED } from '../data/site-config';
 import { GUIDES } from '../lib/pages';
 import { HITOS, quienTxt } from '../lib/tool-specs';
 import { displayDate } from '../lib/format';
@@ -22,12 +22,18 @@ interface Props { lang: Locale }
 const { lang } = Astro.props;
 const x = HOME[lang];
 const path = route('home', lang);
-const h = helpers(lang);
 const sources = sourceList(HOME.sources, lang);
 const jsonLd = [websiteSchema(lang), organizationSchema(lang), webPageSchema({ name: x.h1, description: x.description, path, lang }), webApplicationSchema({ name: x.h1, description: x.description, path, lang }), faqSchema(x.faqs, lang)];
 const ui = t(lang);
 const L = (es: string, en: string) => (lang === 'es' ? es : en);
-const tabla = table([L('Personas', 'People'), L('Umbral 1', 'Threshold 1'), L('Umbral 2', 'Threshold 2'), L('Umbral 3', 'Threshold 3')], HOME.fila(lang), L('Umbrales de renta familiar 2026-2027, en euros', 'Family income thresholds 2026-2027, in euros'), ['l', 'r', 'r', 'r'], lang);
+const perfiles = [
+  { id: 'calendario', t: L('Empieza en septiembre de 2027: qué preparar', 'Starting in September 2027: what to prepare') },
+  { id: 'residencia', t: L('Estudiará fuera de casa', 'Will study away from home') },
+  { id: 'bachillerato', t: L('Bachillerato o FP (formación profesional)', 'Upper secondary or vocational training') },
+  { id: 'requisitos', t: L('Ya está en 2.º o más: qué hay que aprobar', 'Already in year 2 or later: what must be passed') },
+  { id: 'master', t: L('Máster', "Master's degree") },
+  { id: 'denegada', t: L('Os la han denegado o piden papeles', 'Refused, or asked for documents') },
+].filter((p) => hasRoute(p.id, lang));
 const fecha = (iso: string) => displayDate(iso, lang === 'es' ? 'es-ES' : 'en-GB');
 ---
 <PageLayout title={x.title} description={x.description} lang={lang} jsonLd={jsonLd} faqs={x.faqs} sources={sources}>
@@ -39,6 +45,14 @@ const fecha = (iso: string) => displayDate(iso, lang === 'es' ? 'es-ES' : 'en-GB
   <AvisoPlazo lang={lang} />
   <div id="simulador" data-outil data-chrome class="scroll-mt-20"><Tool kind="beca" lang={lang} idPrefix="home" /></div>
   <p class="mt-2 text-sm text-navy-600" data-chrome>{ui.privacyLine}</p>
+  {/* Portes d'entrée par profil, juste sous le simulateur (testeurs du 2026-11-10 : la question n° 1 de chacun —
+       rentrée 2027, études hors de chez soi, FP, 2.º curso, refus — était dans un 3e lien noyé dans une liste). */}
+  <section class="mt-6" aria-labelledby="perfiles-h" data-chrome>
+    <h2 id="perfiles-h" class="text-xl font-bold text-navy-900">{L('Tu caso con la beca: por dónde seguir', 'Your beca MEC case: where to go next')}</h2>
+    <ul class="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+      {perfiles.map((p) => <li><a href={route(p.id, lang)} class="flex min-h-12 items-center justify-between gap-2 rounded-lg border-2 border-accent-500 bg-white px-4 py-2 font-semibold text-accent-700 hover:bg-accent-50"><span>{p.t}</span><span aria-hidden="true">→</span></a></li>)}
+    </ul>
+  </section>
   <Clamp text={x.resume} lang={lang} id="clamp-home" class="my-8" />
   <section class="mt-8">
     <h2 class="text-2xl font-bold text-navy-900">{x.stepsTitle}</h2>
@@ -51,19 +65,13 @@ const fecha = (iso: string) => displayDate(iso, lang === 'es' ? 'es-ES' : 'en-GB
       ))}
     </ol>
   </section>
-  <section class="mt-10"><Body html={x.why(h)} path={path} lang={lang} /></section>
-  {/* La table des umbrales est déjà dans le résultat du simulateur pour la famille saisie : celle de 1 à 6 personnes se replie
-       (test naïf du 2026-11-08 : « la deuxième fois que je vois ces chiffres »). */}
-  <details class="fold mt-10" data-chrome>
-    <summary><h2 class="fold-h">{L('Umbrales para otras familias, de 1 a 8 personas', 'Thresholds for other households, 1 to 8 people')}</h2></summary>
-    <Fragment set:html={tabla} />
-    <p class="pb-4 text-sm text-navy-600"><a href={route('umbrales', lang)} class="font-medium text-accent-700 underline">{L('Familias de más de 8 personas y deducciones', 'Households of more than 8 and deductions')}</a></p>
-  </details>
+  {/* Page plus courte (testeurs du 2026-11-10) : les deux cas chiffrés, la table de 1 à 8 personnes et les cinq replis
+       « Para entender la beca a fondo » sont retirés ; chacun a sa page, liée par les cartes ci-dessous. */}
   <section class="mt-10" data-chrome>
     <h2 class="text-2xl font-bold text-navy-900">{x.datesTitle}</h2>
     <p class="mt-1 text-sm text-navy-600">{x.datesNote}</p>
     <ul class="mt-4 border-l-2 border-navy-200 pl-5">
-      {HITOS.map((m) => <li class="relative mb-3"><span class="absolute -left-[1.6rem] top-1.5 h-2.5 w-2.5 rounded-full bg-accent-500" aria-hidden="true"></span><time datetime={m.iso} class="tabular-nums text-sm font-semibold text-navy-900">{fecha(m.iso)}</time><span class="block text-sm text-navy-700">{lang === 'es' ? m.es : m.en}</span><span class="block text-xs text-navy-600">{quienTxt(m.quien, lang)}</span></li>)}
+      {HITOS.map((m) => <li class="relative mb-3"><span class="absolute -left-[1.6rem] top-1.5 h-2.5 w-2.5 rounded-full bg-accent-500" aria-hidden="true"></span><time datetime={m.iso} class="tabular-nums text-sm font-semibold text-navy-900">{m.iso < LAST_UPDATED ? '✓ ' : ''}{fecha(m.iso)}</time><span class="block text-sm text-navy-700">{lang === 'es' ? m.es : m.en}</span><span class="block text-xs text-navy-600">{quienTxt(m.quien, lang)}</span></li>)}
     </ul>
     <p class="text-sm"><a href={route('calendario', lang)} class="font-medium text-accent-700 underline">{L('Calendario y qué toca ahora', 'Calendar and what comes next')}</a></p>
   </section>
@@ -81,9 +89,5 @@ const fecha = (iso: string) => displayDate(iso, lang === 'es' ? 'es-ES' : 'en-GB
       ))}
     </div>
     <p class="mt-6 text-sm text-navy-700"><a href={route('method', lang)} class="font-medium text-accent-700 underline">{L('Cómo calcula el simulador y de dónde salen las cifras', 'How the simulator calculates and where the figures come from')}</a> · <a href={route('about', lang)} class="font-medium text-accent-700 underline">{L('Quién publica este sitio', 'Who publishes this site')}</a></p>
-  </section>
-  <section class="mt-10">
-    <h2 class="text-2xl font-bold text-navy-900">{x.foldTitle}</h2>
-    {x.sections(h).map((s) => <details class="fold"><summary><h3 class="fold-h">{s.title}</h3></summary><div class="pb-4"><Body html={s.html} path={path} lang={lang} /></div></details>)}
   </section>
 </PageLayout>

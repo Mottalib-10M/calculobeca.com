@@ -22,7 +22,7 @@ const cal = route('calendario', lang);
 {!abierto && corto && (
   <p data-aviso-plazo class="mb-3 rounded-lg border-l-4 border-amber-500 bg-amber-50 px-3 py-1.5 text-sm text-navy-900">
     {lang === 'es'
-      ? <><strong>¿Los estudios empiezan en septiembre de 2027?</strong> Será la beca 2027-2028: su plazo aún no está abierto y, si no cambia la regla, contará la renta de 2026. Las cifras de aquí (2026-2027) sirven de orientación. <a href={cal} class="font-medium text-accent-700 underline">Fechas</a></>
+      ? <><strong>¿Empieza a estudiar en septiembre de 2027?</strong> Aún no hay nada que pedir: será la beca 2027-2028. Las cifras de aquí (2026-2027) dan una idea. <a href={cal} class="font-semibold text-accent-700 underline">Qué preparar →</a></>
       : <><strong>Starting in September 2027?</strong> You will apply for the 2027-2028 grant, which, unless the rule changes, will look at 2026 income; the figures here (2026-2027) are a guide. <a href={cal} class="font-medium text-accent-700 underline">Dates</a></>}
   </p>
 )}
@@ -30,12 +30,13 @@ const cal = route('calendario', lang);
   <div data-aviso-plazo class="mb-4 rounded-lg border-l-4 border-amber-500 bg-amber-50 px-3 py-2 text-sm text-navy-900">
     {lang === 'es'
       ? <>
-          <p><strong>¿Los estudios empiezan en septiembre de 2027?</strong> Será la beca 2027-2028: su plazo aún no está abierto y, si no cambia la regla, contará la renta de 2026. El simulador usa las cifras de 2026-2027 para dar una idea.</p>
-          <p class="mt-1"><strong>¿Ya pedisteis la de 2026-2027?</strong> El plazo cerró el {fin}: las respuestas llegan a «Mis notificaciones», en la sede electrónica del Ministerio.{tardia && ` Fuera de plazo solo cabe la solicitud tardía, hasta el ${tardia}, si el sustentador principal (quien más ingresa en casa) fallece o se jubila de forma forzosa.`}{enlace && <>{' '}<a href={cal} class="font-medium text-accent-700 underline">Qué preparar</a></>}</p>
+          {/* Testeurs du 2026-11-10 : « 2026-2027 » et « el plazo cerró » faisaient croire à une bourse ratée ; la réponse d'abord, courte. */}
+          <p><strong>¿Empieza a estudiar en septiembre de 2027?</strong> Aún no hay nada que pedir: será la beca 2027-2028, y su plazo no está abierto. El simulador ya te da una idea con las cifras de 2026-2027.{enlace && <>{' '}<a href={cal} class="font-semibold text-accent-700 underline">Qué preparar ahora →</a></>}</p>
+          <p class="mt-1"><strong>¿Ya la pedisteis para 2026-2027?</strong> El plazo cerró el {fin}: la respuesta llega a «Mis notificaciones», en la sede electrónica del Ministerio.{tardia && ` Fuera de plazo solo cabe la solicitud tardía, hasta el ${tardia}, si quien más ingresa en casa fallece o se jubila de forma forzosa.`}</p>
         </>
       : <>
-          <p><strong>Starting your studies in September 2027?</strong> You will apply for the 2027-2028 grant. Its window has not been published yet (this year it ran from {ini} to {fin}) and, if the current rule is kept, your family's 2026 income will count. Meanwhile, the simulator uses the 2026-2027 figures to give you an idea.</p>
-          <p class="mt-1"><strong>Already applied for 2026-2027?</strong> The window closed on {fin}: keep an eye on «Mis notificaciones».{tardia && ` Outside the window, only a late application is possible, until ${tardia}, if the main earner dies or is forced to retire.`}{enlace && <>{' '}<a href={cal} class="font-medium text-accent-700 underline">What to prepare before the next window</a></>}</p>
+          <p><strong>Starting your studies in September 2027?</strong> There is nothing to apply for yet: it will be the 2027-2028 grant, whose window is not open. The simulator already gives you an idea with the 2026-2027 figures.{enlace && <>{' '}<a href={cal} class="font-semibold text-accent-700 underline">What to prepare now →</a></>}</p>
+          <p class="mt-1"><strong>Already applied for 2026-2027?</strong> The window closed on {fin}: keep an eye on «Mis notificaciones».{tardia && ` Outside the window, only a late application is possible, until ${tardia}, if the main earner dies or is forced to retire.`}</p>
         </>}
   </div>
 )}

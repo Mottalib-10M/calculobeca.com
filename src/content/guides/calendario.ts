@@ -12,35 +12,37 @@ export default defineGuide({
   sources: ['extracto', 'prorroga', 'convocatoria', 'rd179', 'sede'],
   es: {
     slug: 'calendario',
-    nav: 'Calendario 2026-2027', card: 'Del real decreto al pago: plazo de solicitud, fechas de los órganos de selección y resolución',
+    nav: 'Calendario: qué toca ahora', card: 'Qué fechas ya pasaron, qué toca ahora y qué preparar para la beca 2027-2028',
     title: 'Calendario becas MEC 2026-2027: plazos, resolución y pago',
     description: 'Calendario de la beca 2026-2027: plazo del 7 de abril al 19 de mayo de 2026 tras la prórroga, fechas de comprobación, solicitud tardía y cuantía variable.',
     h1: 'Calendario de la beca general 2026-2027',
-    intro: 'Escribe la fecha de hoy o la que quieras: la calculadora marca en el calendario de la beca qué fases ya pasaron y cuál es la siguiente fecha de la convocatoria.',
-    resume: `El calendario de la beca general 2026-2027 empezó con el Real Decreto 179/2026, publicado el ${day(P.rd.boe, 'es')}, y con la convocatoria del ${day(CV.resolucion, 'es')}, cuyo extracto salió en el BOE el ${day(CV.extractoBoe, 'es')}. El plazo de solicitud se abrió el ${day(CV.plazoInicio, 'es')} y debía cerrar el ${day(CV.plazoFinOriginal, 'es')}, pero una resolución del ${day(CV.prorroga, 'es')} lo prorrogó hasta el ${day(CV.plazoFin, 'es')} a las ${CV.horaFin}, hora peninsular. Ese plazo está cerrado. Fuera de él solo se admiten solicitudes hasta el ${day(CV.solicitudTardiaHasta, 'es')} si el sustentador principal fallece o se jubila de forma forzosa después del plazo. Las comunidades y universidades debían enviar al Ministerio los datos personales y familiares antes del ${day(CV.datosPersonalesHasta, 'es')} y los académicos antes del ${day(CV.ccaaComunicanFijas, 'es')}. Las cuantías fijas se conceden en órdenes parciales y sucesivas a medida que llegan esas propuestas; la variable, en una resolución posterior. La convocatoria del curso 2027-2028 aún no existe: este calendario se actualizará cuando se publique.`,
+    intro: 'La fecha de hoy ya está puesta: la calculadora marca en el calendario de la beca qué fases ya pasaron y qué te toca hacer ahora.',
+    resume: `El calendario de la beca general 2026-2027 ya está casi terminado. Las cifras salieron en el BOE en marzo de 2026 y el plazo para pedirla fue del ${day(CV.plazoInicio, 'es')} al ${day(CV.plazoFin, 'es')}. Ese plazo está cerrado. Si los estudios empiezan en septiembre de 2027, la beca que toca es la 2027-2028: su plazo aún no tiene fecha y por ahora no hay nada que pedir. Si ya pedisteis la de 2026-2027, ahora trabajan la comunidad, la universidad y el Ministerio: revisan los datos de la familia, la renta con Hacienda y las notas del centro. Después conceden las piezas fijas por tandas y, más tarde, el extra de final de curso. Todo llega por la sede electrónica del Ministerio, en «Mis notificaciones», con un correo de aviso. Fuera de plazo solo se admite una solicitud, hasta el ${day(CV.solicitudTardiaHasta, 'es')}, si quien más ingresa en casa fallece o se jubila de forma forzosa.`,
     faqs: [
-      { open: true, q: '¿Cuándo se abre el plazo de la beca para el curso 2027-2028?', a: 'Todavía no hay fecha: depende de un real decreto de umbrales y de una convocatoria que no se han publicado. En el curso 2026-2027, el real decreto salió en marzo y el plazo se abrió el 7 de abril. No anunciamos fechas que no estén en el BOE; cuando se publique la nueva convocatoria, este calendario cambiará.' },
-      { q: '¿Cómo sé en qué fase está mi solicitud?', a: 'En la sede electrónica del Ministerio, apartado «Mis expedientes», según el artículo 52.11 de la convocatoria. También puedes dirigirte a la unidad de becas de tu universidad o de tu consejería de educación identificándote con tu NIF o NIE. Las notificaciones llegan a «Mis notificaciones», con un correo de aviso.' },
-      { q: '¿Cuándo se paga la beca después de concederla?', a: 'La convocatoria no fija un día. Las cuantías fijas se pagan tras cada orden de concesión, por transferencia a la cuenta que diste en la solicitud, que debe estar a tu nombre. La cuantía variable llega después, en otro pago. En algunas comunidades con convenio el pago lo hace la propia comunidad, según el artículo 53.' },
-      { q: '¿Puedo presentar la solicitud fuera de plazo si me olvidé?', a: `No. El artículo 48.2 solo admite solicitudes tardías, hasta el ${day(CV.solicitudTardiaHasta, 'es')}, cuando el sustentador principal fallece o se jubila de forma forzosa después del plazo. En ese caso la solicitud se presenta directamente en la comunidad o la universidad y se valora la nueva situación económica, que hay que acreditar con documentos.` },
+      { open: true, q: '¿Cuándo se abre el plazo de la beca para el curso 2027-2028?', a: `Todavía no hay fecha: depende de un real decreto de umbrales y de una convocatoria que no se han publicado. En el curso 2026-2027, el real decreto salió en marzo y el plazo se abrió el ${day(CV.plazoInicio, 'es')}. No anunciamos fechas que no estén en el BOE; cuando se publique la nueva convocatoria, este calendario cambiará.` },
+      { q: '¿Cómo sé en qué fase está mi solicitud?', a: 'En la sede electrónica del Ministerio, en el apartado «Mis expedientes». También puedes preguntar en la oficina de becas de tu universidad o de la consejería de educación de tu comunidad, con tu DNI o tu NIE (el número de identidad de extranjero). Las notificaciones llegan a «Mis notificaciones», con un correo de aviso.' },
+      { q: '¿Cuándo se paga la beca después de concederla?', a: 'La convocatoria no fija un día. Las piezas fijas se pagan después de cada tanda de concesiones, por transferencia a la cuenta que se dio en la solicitud, que debe estar a nombre del estudiante. El extra de final de curso llega después, en otro pago. En algunas comunidades paga la propia comunidad.' },
     ],
     body: (h) => `<h2>Antes del próximo plazo</h2>
-<p>Si la próxima convocatoria mantiene la regla actual, que mira el año anterior al de la solicitud, contará la renta de 2026 y los miembros que convivan a 31 de diciembre de 2026. Si preparas la solicitud con tiempo, revisa ya la ${h.a('renta', 'renta familiar')} con la declaración de 2026 cuando la tengas y comprueba el ${h.a('patrimonio', 'patrimonio')}. Los umbrales y cuantías de 2027-2028 no se conocen hasta su real decreto: hasta entonces, el ${h.src('rd179', 'Real Decreto 179/2026')} es el último publicado.</p>
-<h2>El calendario de la convocatoria de becas</h2>
-<p>La tabla de la calculadora, arriba, da cada fecha y quién tiene que actuar ese día. Las fechas salen del ${h.src('extracto', 'extracto de la convocatoria')}, de la ${h.src('prorroga', 'resolución de prórroga')} y del texto completo de la ${h.src('convocatoria', 'convocatoria')}. No incluyen festivos autonómicos ni fechas internas de cada universidad.</p>
-<h2>Cómo avanza una solicitud</h2>
 <ol>
-<li>La oficina de becas de tu comunidad o universidad revisa tus datos personales y familiares. Si falta algo, te lo pide y tienes diez días para responder.</li>
-<li>El Ministerio comprueba tu renta y tu patrimonio con Hacienda. Si de ahí sale una propuesta de denegación, te la notifica y puedes alegar.</li>
-<li>Se añaden las notas de tu centro, que muchas veces solo están completas tras los exámenes de recuperación.</li>
-<li>El Ministerio concede las cuantías fijas por tandas, a medida que llegan los datos. Se pagan por transferencia a la cuenta a tu nombre que diste en la solicitud.</li>
-<li>Más tarde llega la resolución de la parte variable, en un plazo de seis meses desde que el Ministerio reúne los datos de las comunidades, con su propio pago.</li>
+<li>Guarda la declaración de la renta de 2026 cuando esté hecha, en la primavera de 2027: si no cambia la regla, es la que contará.</li>
+<li>Contarán las personas que vivan en casa el 31 de diciembre de 2026.</li>
+<li>Comprueba con tiempo la ${h.a('renta', 'renta familiar')} y el ${h.a('patrimonio', 'patrimonio')}: otra casa, terrenos o ahorros grandes.</li>
 </ol>
-<p>Todo se notifica en la ${h.src('sede', 'sede electrónica del Ministerio')}. Si recibes un requerimiento o una propuesta de denegación, cuenta el plazo con la calculadora de ${h.a('denegada', 'beca denegada')}. Sobre el momento del pago de la parte variable, mira ${h.a('variable', 'la cuantía variable')}.</p>
-<h2>Las notificaciones</h2>
-<p>Cada paso llega por la sede: requerimientos, propuestas de denegación, concesiones y la cuantía variable. Recibes antes un correo de aviso. Si no abres la notificación, el plazo corre igual, así que conviene revisar «Mis notificaciones» cada pocas semanas mientras la solicitud está viva.</p>
-${h.mini('recurso', { p: ['acto', 'dia', 'mes'], t: '¿Te ha llegado una notificación? Tu plazo para responder' })}`,
+<p>Las cifras de 2027-2028 no se conocen hasta que salgan en el BOE. Hasta entonces, el ${h.src('rd179', 'real decreto de 2026')} es el último publicado.</p>
+<h2>El calendario de la convocatoria de becas</h2>
+<p>La tabla de arriba da cada fecha y quién tiene que actuar ese día. La marca ✓ quiere decir que la fecha ya pasó. Las fechas salen del ${h.src('extracto', 'anuncio de la convocatoria en el BOE')} y de la ${h.src('prorroga', 'ampliación del plazo')}.</p>
+<h2>Si ya pediste la beca 2026-2027</h2>
+<ol>
+<li>La oficina de becas de tu comunidad o universidad revisa los datos de la familia. Si falta algo, te lo pide y tienes diez días para responder.</li>
+<li>El Ministerio comprueba la renta y los bienes con Hacienda. Si propone denegarla, te lo notifica y puedes responder.</li>
+<li>Se añaden las notas del centro, a veces después de los exámenes de recuperación.</li>
+<li>El Ministerio concede las piezas fijas por tandas y las paga en la cuenta a tu nombre.</li>
+<li>Más tarde llega el extra de final de curso, en otro pago.</li>
+</ol>
+<p>Todo llega a «Mis notificaciones», en la ${h.src('sede', 'sede electrónica del Ministerio')}: si no abres una notificación, el plazo corre igual. Si te piden papeles o proponen denegarla, calcula tu plazo para responder en ${h.a('denegada', 'beca denegada')}.</p>`,
   },
+
   en: {
     slug: 'calendar',
     nav: 'Calendar 2026-2027', card: 'From the royal decree to payment: application window, selection deadlines and the decision',
@@ -68,8 +70,7 @@ ${h.mini('recurso', { p: ['acto', 'dia', 'mes'], t: '¿Te ha llegado una notific
 <li>Later comes the variable-amount decision, within six months of the Ministry having the regions' data, with its own payment.</li>
 </ol>
 <p>Everything is notified on the ${h.src('sede', 'Ministry\'s e-office')}. If you receive a request for documents or a proposed refusal, count the deadline with the ${h.a('denegada', 'refused grant')} calculator. On when the variable part is paid, see ${h.a('variable', 'the variable amount')}.</p>
-<h2>Notices</h2>
-<p>Every step arrives through the e-office: requests for documents, proposed refusals, awards and the variable amount. An email alert comes first. If you do not open the notice, the deadline runs anyway, so check «Mis notificaciones» every few weeks while the application is open. The 15 July date is internal: it is when selection bodies report personal and family checks to the Ministry, not a deadline for you.</p>
-${h.mini('recurso', { p: ['acto', 'dia', 'mes'], t: 'Received a notice? Your deadline to reply' })}`,
+<h3>Notices</h3>
+<p>Every step arrives through the e-office: requests for documents, proposed refusals, awards and the variable amount. An email alert comes first. If you do not open the notice, the deadline runs anyway, so check «Mis notificaciones» every few weeks while the application is open. The 15 July date is internal: it is when selection bodies report personal and family checks to the Ministry, not a deadline for you.</p>`,
   },
 });
