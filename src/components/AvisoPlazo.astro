@@ -31,11 +31,11 @@ const cal = route('calendario', lang);
     {lang === 'es'
       ? <>
           {/* Testeurs du 2026-11-10 : « 2026-2027 » et « el plazo cerró » faisaient croire à une bourse ratée ; la réponse d'abord, courte. */}
-          <p><strong>¿Empieza a estudiar en septiembre de 2027?</strong> Aún no hay nada que pedir: será la beca 2027-2028, y su plazo no está abierto. El simulador ya te da una idea con las cifras de 2026-2027.{enlace && <>{' '}<a href={cal} class="font-semibold text-accent-700 underline">Qué preparar ahora →</a></>}</p>
+          <p><strong>¿Empieza a estudiar en septiembre de 2027?</strong> Aún no hay nada que pedir: será la beca 2027-2028, y su plazo no está abierto. El simulador ya te da una idea con las cifras de 2026-2027. Los umbrales 2027-2028 los fijará el Gobierno en un real decreto en el BOE (el de 2026-2027 salió el 12 de marzo de 2026) y la convocatoria del Ministerio llegará después (el 25 de marzo en 2026).{enlace && <>{' '}<a href={cal} class="font-semibold text-accent-700 underline">Qué preparar ahora →</a></>}</p>
           <p class="mt-1"><strong>¿Ya la pedisteis para 2026-2027?</strong> El plazo cerró el {fin}: la respuesta llega a «Mis notificaciones», en la sede electrónica del Ministerio.{tardia && ` Fuera de plazo solo cabe la solicitud tardía, hasta el ${tardia}, si quien más ingresa en casa fallece o se jubila de forma forzosa.`}</p>
         </>
       : <>
-          <p><strong>Starting your studies in September 2027?</strong> There is nothing to apply for yet: it will be the 2027-2028 grant, whose window is not open. The simulator already gives you an idea with the 2026-2027 figures.{enlace && <>{' '}<a href={cal} class="font-semibold text-accent-700 underline">What to prepare now →</a></>}</p>
+          <p><strong>Starting your studies in September 2027?</strong> There is nothing to apply for yet: it will be the 2027-2028 grant, whose window is not open. The simulator already gives you an idea with the 2026-2027 figures. The Government sets the 2027-2028 thresholds in a royal decree in the BOE (the 2026-2027 one came out on 12 March 2026), and the Ministry's call follows (25 March in 2026).{enlace && <>{' '}<a href={cal} class="font-semibold text-accent-700 underline">What to prepare now →</a></>}</p>
           <p class="mt-1"><strong>Already applied for 2026-2027?</strong> The window closed on {fin}: keep an eye on «Mis notificaciones».{tardia && ` Outside the window, only a late application is possible, until ${tardia}, if the main earner dies or is forced to retire.`}</p>
         </>}
   </div>
