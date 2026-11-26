@@ -4,8 +4,8 @@
 @font-face { font-family: 'Source Serif 4'; font-style: normal; font-weight: 200 900; font-display: swap; src: url('/fonts/source-serif-4-var.woff2') format('woff2'); }
 @font-face { font-family: 'Inter'; font-style: normal; font-weight: 400 700; font-display: swap; src: url('/fonts/inter-var.woff2') format('woff2'); }
 @theme {
-  --color-navy-50: #f8fafc; --color-navy-100: #f1f5f9; --color-navy-200: #e2e8f0; --color-navy-300: #cbd5e1; --color-navy-400: #94a3b8; --color-navy-500: #64748b; --color-navy-600: #475569; --color-navy-700: #334155; --color-navy-800: #1e293b; --color-navy-900: #0f172a; --color-navy-950: #020617;
-  --color-accent-50: #fdeded; --color-accent-100: #fad6d8; --color-accent-200: #f5adb0; --color-accent-300: #ee777c; --color-accent-400: #e74047; --color-accent-500: #AA151B; --color-accent-600: #901217; --color-accent-700: #770f13; --color-accent-800: #5f0c0f; --color-accent-900: #4b090c;
+  --color-navy-50: #F6F5F5; --color-navy-100: #ECE9E9; --color-navy-200: #D9D2D2; --color-navy-300: #BBAFB0; --color-navy-400: #907E7E; --color-navy-500: #776060; --color-navy-600: #5D4243; --color-navy-700: #48292A; --color-navy-800: #371516; --color-navy-900: #2A0607; --color-navy-950: #020617;
+  --color-accent-50: #F8ECED; --color-accent-100: #F1DADB; --color-accent-200: #E2AFB1; --color-accent-300: #D07E82; --color-accent-400: #BD484D; --color-accent-500: #AA151B; --color-accent-600: #901217; --color-accent-700: #7A0F13; --color-accent-800: #630C10; --color-accent-900: #4b090c;
   --color-success: #15803d; --color-warning: #b45309; --color-error: #dc2626;
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
   --font-serif: 'Source Serif 4', Georgia, 'Times New Roman', serif;
@@ -151,3 +151,63 @@ p[id$="-help"]:not([role="status"]), [data-fixe], [data-actuellement], [aria-liv
 :where(form, div, fieldset):has(> .grid-rows-subgrid) { align-content: start; }
 /* Dans une grille, le cadre du formulaire s'arrête sous ses champs au lieu de s'étirer à la hauteur du résultat. */
 .grid > form:has(> .grid-rows-subgrid) { align-self: start; }
+
+/* === Charte du pays (refonte d'identité validée par l'éditeur, appliquée le 2026-11-25) ===
+   En-tête plein, bandeau héros, simulateur en carte, sections alternées, chiffres-résultats, boutons et pied
+   aux couleurs du pays ; l'échelle --color-accent-* du @theme porte la couleur forte. */
+header nav[aria-label] { background:#AA151B !important; border-bottom:4px solid #F1BF00 !important; }
+header nav[aria-label] > div:first-child > a, header nav[aria-label] > div:first-child > div > a, header nav[aria-label] .nav-dropdown-trigger, #mobile-menu-toggle { color:#fff !important; }
+header nav[aria-label] > div:first-child > a span.text-accent-500 { color:#F7DC73 !important; }
+header nav[aria-label] .nav-dropdown-trigger:hover, header nav[aria-label] > div:first-child > div > a:hover { background:rgba(255,255,255,.14) !important; }
+header nav[aria-label] > div:first-child a[hreflang], header nav[aria-label] > div:first-child a[lang] { border-color:rgba(255,255,255,.6) !important; }
+header nav[aria-label] img[src^="data:"] { background:#fff; border-radius:8px; padding:2px; }
+.nav-dropdown-panel a, #mobile-menu a, #mobile-menu button { color:#371516 !important; }
+main > div:first-child { padding-top:0 !important; }
+main > div > header:has(h1), main > div > header:has(h1) ~ :not(section,[data-outil]):has(~ [data-outil]) { box-shadow:0 0 0 100vmax #AA151B; clip-path:inset(0 -100vmax); margin-bottom:0 !important; }
+main > div > header:has(h1) { background:#AA151B; color:#fff; padding:1rem 0 .6rem; }
+main > div > header:has(h1) ~ :not(section,[data-outil]):has(~ [data-outil]) { background:#AA151B; margin-top:0 !important; margin-bottom:.5rem !important; clip-path:inset(0 -100vmax -1rem) !important; }
+main > div > header:has(h1) ~ :not(section,nav,[data-outil]):has(~ [data-outil]) :is(p,span,a,label,li,time) { color:rgba(255,255,255,.92) !important; }
+main > div > header:has(h1) h1 { color:#fff !important; letter-spacing:-0.02em; }
+main > div > header:has(h1) h1 span { color:#F7DC73 !important; }
+main > div > header:has(h1) p, main > div > header:has(h1) div, main > div > header:has(h1) a, main > div > header:has(h1) time, main > div > header:has(h1) span:not(h1 span) { color:rgba(255,255,255,.92) !important; }
+main > div > header:has(h1) + nav { background:#AA151B; box-shadow:0 0 0 100vmax #AA151B; clip-path:inset(0 -100vmax); margin:0 !important; padding-bottom:.8rem; }
+main > div > header:has(h1) + nav, main > div > header:has(h1) + nav * { color:#fff !important; }
+main > div > header:has(h1) + nav a[class*="bg-white"] { background:#F1BF00 !important; border-color:#F1BF00 !important; color:#2A0607 !important; }
+main > div > header:has(h1) + nav a[class*="bg-white"] * { color:#2A0607 !important; }
+main > div > header:has(h1) + nav a[class*="bg-white"]:hover { background:#CDA200 !important; }
+main [data-outil] , main > div > header:has(h1) + :not(nav,style,script,p,.clamp,[class*="amber"],[class*="border-l"]) , main > div > header:has(h1) + nav + * , main > div > header:has(h1) ~ astro-island:first-of-type > *:first-child { border-image:linear-gradient(#AA151B 0 5.5rem, transparent 5.5rem) fill 0//0 100vmax; }
+main [data-outil] > astro-island > :first-child, main [data-outil] > div:not([class*="amber"]):first-of-type, main > div > header:has(h1) ~ astro-island:first-of-type > :first-child > :first-child { background:#fff; border-top:6px solid #F1BF00 !important; border-radius:14px; box-shadow:0 14px 34px -14px rgba(0,0,0,.45); }
+main > div > section:nth-of-type(even), main > div > div.prose:nth-of-type(odd) { border-image:conic-gradient(#F5E3E4 0 0) fill 0//0 100vmax; padding-block:1.75rem; }
+main section h2, main .prose h2{color:#2A0607!important}main section h2::before, main .prose h2::before{content:"";display:inline-block;width:.62em;height:.62em;margin-right:.45em;border-radius:3px;background:#F1BF00;vertical-align:.04em}
+main .bg-accent-50 { background:#F8ECED !important; border-left:6px solid #F1BF00; }
+main [class*="tabular-nums"][class*="text-2xl"], main [class*="tabular-nums"][class*="text-3xl"], main [class*="tabular-nums"][class*="text-4xl"], main dd[class*="text-2xl"], main dd[class*="text-xl"], main [data-outil] [class*="text-3xl"], main [data-outil] [class*="text-4xl"] { font-size:2.25rem !important; line-height:1.1; color:#AA151B !important; }
+main a[class*="border-accent"], main a[class*="bg-accent-5"], main a[class*="bg-accent-6"], main button:is([class*="bg-accent-5"],[class*="bg-accent-6"],[class*="bg-accent-7"]):not([class*="bg-accent-50"]):not(.fixed), main button[type="submit"] { background:#F1BF00 !important; color:#2A0607 !important; border-color:#F1BF00 !important; border-radius:10px; }
+main a[class*="border-accent"]:hover, main button:is([class*="bg-accent-5"],[class*="bg-accent-6"],[class*="bg-accent-7"]):not([class*="bg-accent-50"]):not(.fixed):hover { background:#CDA200 !important; }
+main a[class*="border-accent"] * { color:#2A0607 !important; }
+main p a, main li > a:not([class*="rounded"]), main .prose a { color:#AA151B !important; text-decoration:underline; text-decoration-color:#F1BF00; text-decoration-thickness:2px; text-underline-offset:3px; }
+main table thead th { color:#2A0607; border-bottom: 0 !important; box-shadow: inset 0 -3px 0 #F1BF00 !important; }
+body > footer, footer.mt-16 { background:#2A0607 !important; border-top:5px solid #F1BF00 !important; }
+body > footer *, footer.mt-16 * { color:#F1F5F9 !important; border-color:rgba(255,255,255,.18) !important; }
+body > footer a, footer.mt-16 a { color:#F6D559 !important; }
+/* sites sans data-outil : simulateur directement dans un astro-island (carte .rechner) ou dans une section/div enveloppe */
+main > div > header:has(h1):has(~ astro-island:first-of-type > .rechner.rechner) { padding-bottom:4.5rem; }
+main > div > header:has(h1) ~ astro-island:first-of-type > .rechner.rechner { border-image:none !important; position:relative; margin-top:-3.25rem; background:#fff !important; border:1px solid #D9D2D2 !important; border-top:6px solid #F1BF00 !important; border-radius:14px; box-shadow:0 14px 34px -14px rgba(0,0,0,.45); }
+main > div > header:has(h1) ~ astro-island:first-of-type > .rechner.rechner > :first-child { background:transparent !important; border-top:0 !important; box-shadow:none !important; border-radius:0; }
+main > div > header:has(h1) [class*="bg-white"], main > div > header:has(h1) [class*="bg-white"] * { color:#2A0607 !important; }
+main > div > header:has(h1) + :is(section,div):not([data-outil]) > astro-island > :first-child { background:#fff; border-top:6px solid #F1BF00 !important; border-radius:14px; box-shadow:0 14px 34px -14px rgba(0,0,0,.45); }
+
+/* CORRECTIFS v3 (reprise du 2026-11-25) : contrastes ciblés sur l'élément (§10.4) */
+main header[class^="mb-"] ~ :is([data-outil], astro-island) { position: relative; z-index: 1; }
+main header[class^="mb-"] ~ astro-island > *, main header[class^="mb-"] ~ :not(#x) astro-island > * { position: relative; z-index: 1; }
+main header[class^="mb-"] ~ :not(#x) :is(form, div)[class~="bg-navy-50"] :is(label, p, span) { color: #1F2937 !important; }
+main :not(#x) :not(#y) div.flex.h-9.overflow-hidden > div > span { color: #111 !important; background: #fff !important; border-radius: 3px; padding: 0 3px !important; }
+main :is(.text-navy-500, .text-navy-400, caption) { color: #475569 !important; }
+main header[class^="mb-"] :is(div, p, span, label, small, time) { color: #fff !important; }
+footer [class~="bg-green-50"] { background: transparent !important; border-color: rgba(255,255,255,.4) !important; }
+main :is(p, li, td, .prose) a { text-underline-offset: 5px !important; }
+.skip-link:not(:focus), a[href="#main-content"]:not(:focus), a[href="#main"]:not(:focus) { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; border: 0 !important; overflow: hidden !important; clip: rect(0 0 0 0) !important; white-space: nowrap !important; }
+/* fil d'Ariane posé sur le bandeau (pages à propos et légales) */
+main > div:has(> nav[aria-label]):has(+ div > header:has(h1)) { background:#AA151B; box-shadow:0 0 0 100vmax #AA151B; clip-path:inset(0 -100vmax); }
+main > div:has(> nav[aria-label]):has(+ div > header:has(h1)) :is(a,span,li) { color:#fff !important; }
+main > div:has(> nav[aria-label]) + div:has(> header:has(h1)) { padding-top:0 !important; }
+/* === fin de la charte du pays === */
